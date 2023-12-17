@@ -1,0 +1,7 @@
+{
+  "all_order": "All Order",
+  "order_tracking": "Order Tracking",
+  "change_location": "Change location",
+  "shipping_to_my_home": "Shipping to My home",
+  "order_id": "Order {{id}}"
+}
