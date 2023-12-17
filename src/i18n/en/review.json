@@ -1,0 +1,9 @@
+{
+  "review_user": "Review’s user",
+  "reviewer": "{{number}} reviewer",
+  "add_a_review": "Add a review",
+  "rating_product": "Rating Product",
+  "write_your_review": "Write your review",
+  "placeholder_review": "What do you like most?",
+  "add_image_here": "Add image here"
+}
