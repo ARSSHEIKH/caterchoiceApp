@@ -47,6 +47,7 @@ export interface ProductFragment {
   id?: string;
   name?: string;
   price?: number;
+  p_price?: number;
   category_id?: string;
   gender?: Gender_Types_Enum;
   image?: string;
