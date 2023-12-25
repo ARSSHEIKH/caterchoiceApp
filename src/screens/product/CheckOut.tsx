@@ -28,6 +28,7 @@ import {orderSelector, setExtra, fetchAvailableSlots, submitOrder} from "../../s
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import { Linking } from 'react-native'
 import { web } from '../../constants/common';
+import { actualPrice } from 'screens/order/MyCart';
 
 
 
@@ -203,7 +204,7 @@ const CheckOut = React.memo(() => {
 
   const getTotal = () => {
     return cart.reduce(
-      (total, item) => total + (item.quantity || 0) * (item.price || 0) + item.quantity * (((item.price || 0) * (item.tax || 0)) / 100),
+      (total, item) => total + (item.quantity || 0) * (actualPrice(item) || 0) + item.quantity * (((actualPrice(item) || 0) * (item.tax || 0)) / 100),
       0
   ).toFixed(2);
   }

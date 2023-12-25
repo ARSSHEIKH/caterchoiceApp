@@ -73,7 +73,7 @@ const data: CartFragment[] = [
     quantity: 1,
   },
 ];
-
+export const actualPrice = (item) => item?.variant=="Pack"?item?.p_price:item?.price;
 const MyCart = React.memo(() => {
   const { bottom } = useLayout();
   const { openDrawer } = useDrawer();
@@ -96,9 +96,10 @@ const MyCart = React.memo(() => {
     dispatch(decreament(item));
   }
 
+
   const getTotal = () => {
     return cart.reduce(
-      (total, item) => total + (item.quantity || 0) * (item.price || 0) + item.quantity * (((item.price || 0) * (item.tax || 0)) / 100),
+      (total, item) => total + (item.quantity || 0) * (actualPrice(item) || 0) + item.quantity * (((actualPrice(item) || 0) * (item.tax || 0)) / 100),
       0
   ).toFixed(2);
   }

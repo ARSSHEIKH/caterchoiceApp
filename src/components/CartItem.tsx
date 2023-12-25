@@ -43,9 +43,12 @@ const CartItem: React.FC<CartItemProps> = ({
   const [sizeSelected, setSizeSelected] = React.useState<string>('');
   
 
-  const { image, name, price, quantity, colors, color, sizes, size } = item;
+  const { image, name, price, quantity, colors, color, sizes, size, p_price } = item;
 
   const images = image?.split(',');
+
+  console.log("quantity", quantity);
+  
 
   const borderColor = theme['background-basic-color-3'];
 
@@ -111,6 +114,7 @@ const CartItem: React.FC<CartItemProps> = ({
   }, []);
 
   return (
+    <>
     <Swipeable
       ref={refSwipeable}
       renderRightActions={renderRightActions}
@@ -134,7 +138,7 @@ const CartItem: React.FC<CartItemProps> = ({
         <View style={[styles.contentContainer, { borderColor }]}>
           <View style={styles.top}>
             <Layout style={styles.imageView}>
-              <FastImage source={{ uri: cdn+images?.[0] }} style={styles.image} />
+              <FastImage source={{ uri: images?.[0] }} style={styles.image} />
             </Layout>
             <View style={styles.flexOne}>
               <View style={{ flexDirection: 'row', flex: 1 }}>
@@ -176,7 +180,7 @@ const CartItem: React.FC<CartItemProps> = ({
                     </View>
                   </TouchableOpacity>
                 </View>
-                <Text category="t1">{currency}{price}</Text>
+                <Text category="t1">{currency}{item?.variant=="Pack"?p_price:price}</Text>
               </View>
             </View>
           </View>
@@ -221,6 +225,7 @@ const CartItem: React.FC<CartItemProps> = ({
         </View>
       </TouchableOpacity>
     </Swipeable>
+    </>
   );
 };
 

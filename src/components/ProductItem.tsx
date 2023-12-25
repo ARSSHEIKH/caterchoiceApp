@@ -7,7 +7,7 @@ import Text from './Text';
 import Skeleton from './Skeleton';
 
 import { ProductFragment } from 'constants/types';
-import {cdn, currency} from "constants/common";
+import { cdn, currency } from "constants/common";
 
 
 interface ProductItemProps {
@@ -17,8 +17,7 @@ interface ProductItemProps {
 }
 
 const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
-  console.log('Product Item', item)
-  const { image, name, tags, price, price_sale, is_sale, is_favourite } = item;
+  const { image, name, tags, price, price_sale, is_sale, is_favourite, p_price } = item;
   const images = image?.split(',');
 
   const theme = useTheme();
@@ -52,10 +51,22 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
         {name}
       </Text>
       <View style={styles.priceView}>
-        {/* <Text category="b2">{currency}{price_sale}</Text> */}
-        <Text category="c3" marginLeft={4} marginTop={3}>
-          {currency}{price}
-        </Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems:"center", width:"100%" }} >
+          <Text category="b2">Single</Text>
+          <Text category="b2" marginLeft={4} marginTop={0}>
+            {currency}{price}
+          </Text>
+        </View>
+      </View>
+      <View style={[styles.priceView, {marginTop:5}]}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems:"center", width:"100%" }} >
+
+          <Text category="b2">Pack</Text>
+          <Text category="b2" marginLeft={4} marginTop={0}>
+            {currency}{p_price}
+          </Text>
+        </View>
+
       </View>
       <View style={styles.top}>
         {is_sale && (
@@ -69,7 +80,7 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
           <Icon
             name="heart"
             pack="assets"
-            style={[styles.icon, { tintColor: is_favourite?"#ce1212":theme['background-basic-color-6'] }]}
+            style={[styles.icon, { tintColor: is_favourite ? "#ce1212" : theme['background-basic-color-6'] }]}
           />
         </TouchableOpacity>
       </View>

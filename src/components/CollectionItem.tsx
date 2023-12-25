@@ -22,11 +22,12 @@ const CollectionItem = ({ style, item, onPress }: CollectionItemProps) => {
   const theme = useTheme();
   const { width } = useLayout();
   const { name, image } = item;
+  
 
   const ImageItem = ({ image, _style }: { image: string; _style?: ViewStyle }) => {
     return image ? (
       <View style={[styles.image_view, _style]}>
-        <FastImage style={styles.image} resizeMode="cover" source={{uri:category_uri+image}} />
+        <FastImage style={styles.image} resizeMode="cover" source={{uri:image}} />
       </View>
     ) : (
       <View />

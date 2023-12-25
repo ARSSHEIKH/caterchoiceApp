@@ -23,7 +23,7 @@ const ProductHorizontal = ({ item, style, onPress }: ProductHorizontalProps) => 
   return (
     <TouchableOpacity activeOpacity={0.7} style={[styles.container, style]} onPress={onPress}>
       <View style={[styles.imageView, { height: 100 }]}>
-        {!!images && <FastImage resizeMode="cover" style={styles.image} source={{ uri: cdn+images[0] }} />}
+        {!!images && <FastImage resizeMode="cover" style={styles.image} source={{ uri: images[0] }} />}
       </View>
       <View style={{ flex: 1 }}>
         <View style={styles.tagView}>

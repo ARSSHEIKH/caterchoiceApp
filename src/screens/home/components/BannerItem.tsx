@@ -14,10 +14,12 @@ interface BannerItemProps {
 
 const BannerItem = ({ item, onPress }: BannerItemProps) => {
   const { title, description, button, image } = item;
+  console.log("image", image);
+  
 
   return (
     <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={onPress}>
-      <FastImage style={styles.image} source={{ uri: banner_uri+image }}>
+      <FastImage style={styles.image} source={{ uri: "https://cater-choice-assets.s3.eu-west-2.amazonaws.com/"+image }}>
         <View style={styles.content}>
           {/* <Text category="h4" marginTop={16}>
             {title}

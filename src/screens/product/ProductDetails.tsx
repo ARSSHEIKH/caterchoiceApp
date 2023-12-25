@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Image, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import {
   BlogItem,
@@ -11,7 +11,7 @@ import {
   Text,
   TitleBar,
 } from 'components';
-import { useTheme, Layout, TopNavigation, Icon, Button } from '@ui-kitten/components';
+import { useTheme, Layout, TopNavigation, Icon, Button, Radio, Select, SelectItem, RadioGroup } from '@ui-kitten/components';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from 'hooks';
@@ -31,11 +31,21 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import {addCart} from "../../store/slices/orderSlice";
-import {setFavourite} from "../../store/slices/productSlice";
-import {cdn, currency} from "constants/common";
+import { addCart } from "../../store/slices/orderSlice";
+import { setFavourite } from "../../store/slices/productSlice";
+import { cdn, currency } from "constants/common";
 
-const ProductDetails = React.memo(({route}) => {
+export const priceVariants = [
+  {
+    id: 1,
+    name:"Single"
+  },
+  {
+    id: 2,
+    name:"Pack"
+  },
+]
+const ProductDetails = React.memo(({ route }) => {
   const item = Object.assign({}, route?.params?.item);
   const theme = useTheme();
   const { width, bottom } = useLayout();
@@ -49,16 +59,17 @@ const ProductDetails = React.memo(({route}) => {
   const [colorSelected, setColorSelected] = React.useState<string>('#B5E4CA');
   const [isFavourite, setIsFavourite] = React.useState<boolean>(item?.is_favourite);
   const [added, setAdded] = React.useState<boolean>(false);
+const [selectedVariant, setSelectedVariant] = useState(0)
 
-
-  let photos:string[] = [];
+  let photos: string[] = [];
   const images = item?.image?.split(',');
-  images.map((item:string)=>{
-    photos.push(cdn+item);
+  images.map((item: string) => {
+    photos.push(item);
   });
 
 
   React.useEffect(() => {
+    setAdded(false)
     setTimeout(() => {
       setLoading(false);
     }, 3000);
@@ -123,13 +134,13 @@ const ProductDetails = React.memo(({route}) => {
     progress.value = withTiming(0);
     setTimeout(() => {
       _navigate('ImageDetail', {
-        images: photos.map(i=> ({image_url:i, likes:0, comments:0})),
+        images: photos.map(i => ({ image_url: i, likes: 0, comments: 0 })),
       });
     }, 200);
   }, []);
 
   const addToCart = () => {
-    dispatch(addCart(item));
+    dispatch(addCart({...item, variant:priceVariants[selectedVariant].name}));
     setAdded(true);
     //navigate('MyCart')
   }
@@ -172,6 +183,7 @@ const ProductDetails = React.memo(({route}) => {
             </TouchableOpacity>
           </Animated.View>
           <View style={styles.row1}>
+            
             <View style={styles.flexOne}>
               {/* <View style={styles.row2}>
                 {Array(5)
@@ -189,12 +201,26 @@ const ProductDetails = React.memo(({route}) => {
                   (212)
                 </Text>
               </View> */}
+            
               <Text category="h6" marginTop={8} marginRight={16}>
                 {item?.name}
               </Text>
             </View>
-            <Text category="h3">{currency}{item?.price}</Text>
+            <Text category="h3">{currency}{selectedVariant==0?item?.price:item?.p_price}</Text>
+            
           </View>
+          
+          
+
+          <RadioGroup style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            paddingLeft:20
+          }} selectedIndex={selectedVariant} onChange={(index)=>{setSelectedVariant(index); setAdded(false)}} >
+              {
+                priceVariants?.map((v)=><Radio>{v?.name}</Radio>)
+              }
+            </RadioGroup>
           {/* <Text category="t1" marginTop={24} marginBottom={12} marginLeft={16}>
             {t('product_details:select_color')}
           </Text>
@@ -253,14 +279,14 @@ const ProductDetails = React.memo(({route}) => {
         <Layout style={styles.box2}>
           <FeatureItem
             title={t('common:information')}
-            onPress={() => navigate('ProductInformation', {item:item})}
+            onPress={() => navigate('ProductInformation', { item: item })}
           />
           {/* <FeatureItem
             title={t('product_details:size_guide')}
             onPress={() => navigate('ProductSize')}
           /> */}
           {/* <FeatureItem title={t('common:review')} onPress={() => navigate('ProductReview')} /> */}
-          <FeatureItem title={t('common:shipping_detail')} is_last onPress={() => {}} />
+          <FeatureItem title={t('common:shipping_detail')} is_last onPress={() => { }} />
         </Layout>
         {/* <TitleBar
           title={t('product_details:blog_fashion')}
@@ -330,17 +356,17 @@ const ProductDetails = React.memo(({route}) => {
         accessoryLeft={<NavigationAction />}
         accessoryRight={
           <View style={styles.row}>
-             <TouchableOpacity activeOpacity={0.7} onPress={() => {
+            <TouchableOpacity activeOpacity={0.7} onPress={() => {
               setIsFavourite(!isFavourite)
               dispatch(setFavourite(item))
-              }}>
+            }}>
               <Icon
                 name="heart"
                 pack="assets"
-                style={[styles.icon, { tintColor: isFavourite?"#ce1212":theme['background-basic-color-6'] }]}
+                style={[styles.icon, { tintColor: isFavourite ? "#ce1212" : theme['background-basic-color-6'] }]}
               />
             </TouchableOpacity>
-            <NavigationAction marginLeft={12} icon="share" onPress={() => {}} />
+            <NavigationAction marginLeft={12} icon="share" onPress={() => { }} />
           </View>
         }
       />
@@ -360,18 +386,19 @@ const ProductDetails = React.memo(({route}) => {
         }}
       />
       <Layout style={[styles.bottomView, { paddingBottom: bottom + 16 + 48 }]}>
-        {added?
-        <Button
-          children={t('Added').toString()}
-          style={[styles.button, {backgroundColor:"#ccc"}]}
-          onPress={addToCart}
-        />:<Button
-          children={t('Add to cart').toString()}
-          style={styles.button}
-          onPress={addToCart}
-        />}
+        {added ?
+          <Button
+          disabled={added}
+            children={t('Added').toString()}
+            style={[styles.button, { backgroundColor: "#ccc" }]}
+            onPress={addToCart}
+          /> : <Button
+            children={t('Add to cart').toString()}
+            style={styles.button}
+            onPress={addToCart}
+          />}
         <TouchableOpacity
-          onPress={()=>navigate('MyCart')}
+          onPress={() => navigate('MyCart')}
           activeOpacity={0.7}
           style={[styles.cart, { borderColor: theme['color-primary-500'] }]}>
           <Icon pack="assets" name="cart" style={{ tintColor: theme['color-primary-500'] }} />

@@ -25,7 +25,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ item, onPress, ...rest }) =
       </View>
       } */}
       <View  style={[styles.iconView, { backgroundColor: color }]}>
-      <FastImage style={{flex:1, width:120, height:120}} resizeMode="contain" source={{uri:category_uri+image}} />
+      <FastImage style={{flex:1, width:120, height:120}} resizeMode="contain" source={{uri:image}} />
       </View>
       
       <Text marginTop={8} center category="c1" status="content">
