@@ -17,7 +17,7 @@ interface ProductItemProps {
 }
 
 const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
-  console.log('Product Item', item.price)
+  console.log('Product Item', item)
   const { image, name, tags, price, price_sale, is_sale, is_favourite } = item;
   const images = image?.split(',');
 
