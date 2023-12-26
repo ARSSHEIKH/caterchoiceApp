@@ -121,6 +121,7 @@ const MyCart = React.memo(() => {
 
   const renderItem = React.useCallback(
     ({ item }: { item: CartFragment }) => {
+      console.log("Cart Item Details", item)
       const selectedItem = listSelected.find((i) => i.id === item.id);
 
       return (

@@ -13,13 +13,15 @@ import { cdn, currency } from "constants/common";
 interface ProductHorizontalProps {
   style?: ViewStyle;
   item: ProductFragment;
+  type?: 'SINGLE' | 'CASE'
   onPress?(): void;
 }
 
-const ProductHorizontal = ({ item, style, onPress }: ProductHorizontalProps) => {
+const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProps) => {
   const { image, name, tags, price, price_sale, is_sale, p_price } = item;
   const images = image?.split(',');
-  
+
+  console.log('Product Type', images[0])
   return (
     <TouchableOpacity activeOpacity={0.7} style={[styles.container, style]} onPress={onPress}>
       <View style={[styles.imageView, { height: 100 }]}>
@@ -38,25 +40,46 @@ const ProductHorizontal = ({ item, style, onPress }: ProductHorizontalProps) => 
         <Text category="b3" marginTop={4} numberOfLines={2}>
           {name}
         </Text>
-        <View style={styles.priceViewContainer}>
-          {/* <Text category="b2">{currency}{price_sale}</Text> */}
-          <View style={styles.priceView}>
-            <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-              Single
-            </Text>
-            <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-              {currency}{price}
-            </Text>
-          </View>
-          <View style={styles.priceView}>
-            <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-              Pack
-            </Text>
-            <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-              {currency}{p_price}
-            </Text>
-          </View>
-        </View>
+        {/* <Text category="b2">{currency}{price_sale}</Text> */}
+        {type ?
+          (
+            <View style={styles.priceViewContainer}>
+              <View style={styles.priceView}>
+                <Text category="b3" status="placeholder" marginLeft={4} marginTop={3}>
+                {type == 'SINGLE' ? 'Single' : 'Pack'}
+                </Text>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  {currency}{type == 'SINGLE' ? price : p_price}
+                </Text>
+              </View>
+              {/* <View style={{width: '70%', alignItems: 'flex-end'}}>
+                <Text category="t1" status="placeholder" marginLeft={4} marginTop={3}>
+                  {type == 'SINGLE' ? 'Single' : 'Pack'}
+                </Text>
+              </View> */}
+            </View>
+          ) :
+          (
+            <View style={styles.priceViewContainer}>
+              <View style={styles.priceView}>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  Single
+                </Text>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  {currency}{price}
+                </Text>
+              </View>
+              <View style={styles.priceView}>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  Pack
+                </Text>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  {currency}{p_price}
+                </Text>
+              </View>
+            </View>
+          )
+        }
       </View>
       {is_sale && (
         <View style={styles.saleTag}>

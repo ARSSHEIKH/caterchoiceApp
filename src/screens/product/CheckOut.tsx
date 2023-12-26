@@ -105,9 +105,11 @@ const CheckOut = React.memo(() => {
     let data: any = {};
     data['cart'] = cart
     data['extra'] = extra;
+    console.log('Checkout Products Data payload', data)
     const json = await dispatch(submitOrder(data));
     if (json.status == 200) {
-      openLink(json?.data?.data)
+      console.log('Submit Order response', json?.data?.data)
+      // openLink(json?.data?.data)
       navigate('ModalScreen', {
         modalScreen: {
           status: 'success',

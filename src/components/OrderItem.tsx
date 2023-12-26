@@ -23,7 +23,7 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { reference_no, sale_status, items } = item;
-
+  console.log('My ordered item', items)
   return (
     <View
       style={[styles.container, { borderBottomColor: theme['background-basic-color-4'] }, style]}>
@@ -34,7 +34,7 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
         <Text category="c2">{sale_status}</Text>
       </View>
       {(items || []).map((i, idx) => {
-        return <ProductHorizontal key={idx} item={(i?.product || {})} />;
+        return <ProductHorizontal key={idx} item={(i?.product || {})} type={i?.type} />;
       })}
       <View style={styles.row1}>
         {buttonLeft &&

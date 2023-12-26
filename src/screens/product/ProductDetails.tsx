@@ -140,7 +140,7 @@ const [selectedVariant, setSelectedVariant] = useState(0)
   }, []);
 
   const addToCart = () => {
-    dispatch(addCart({...item, variant:priceVariants[selectedVariant].name}));
+    dispatch(addCart({...item, variant:priceVariants[selectedVariant].name, type:selectedVariant==0?'SINGLE':'CASE'}));
     setAdded(true);
     //navigate('MyCart')
   }
