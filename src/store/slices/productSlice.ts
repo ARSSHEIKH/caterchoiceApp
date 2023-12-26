@@ -105,7 +105,6 @@ export const fetchPromotions = (page: number) => async (dispatch: any) => {
   dispatch(setError({}));
   dispatch(setLoader(true));
   const json = await Api.productPromotions(page);
-  console.log("json", json)
   if (json.status == 200) {
     if (page > 1) {
       dispatch(setMoreProduct(json.data?.data));

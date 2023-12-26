@@ -21,7 +21,6 @@ const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProp
   const { image, name, tags, price, price_sale, is_sale, p_price } = item;
   const images = image?.split(',');
 
-  console.log('Product Type', images[0])
   return (
     <TouchableOpacity activeOpacity={0.7} style={[styles.container, style]} onPress={onPress}>
       <View style={[styles.imageView, { height: 100 }]}>

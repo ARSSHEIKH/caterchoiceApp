@@ -47,9 +47,6 @@ const ProductGridScreen = React.memo(({ route }) => {
     return route?.params?.isPromotion ? await dispatch(fetchPromotions(page)) : await dispatch(fetchProduct(page, params))
   }
 
-  console.log('====================================');
-  console.log("data", data);
-  console.log('====================================');
 
   React.useEffect(() => {
     onEndReachedCalledDuringMomentum = true;

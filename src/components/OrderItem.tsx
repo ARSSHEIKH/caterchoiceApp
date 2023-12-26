@@ -23,7 +23,6 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { reference_no, sale_status, items } = item;
-  console.log('My ordered item', items)
   return (
     <View
       style={[styles.container, { borderBottomColor: theme['background-basic-color-4'] }, style]}>

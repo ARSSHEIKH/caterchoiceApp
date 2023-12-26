@@ -14,7 +14,6 @@ interface BannerItemProps {
 
 const BannerItem = ({ item, onPress }: BannerItemProps) => {
   const { title, description, button, image } = item;
-  console.log("image", image);
 
 
   return (
