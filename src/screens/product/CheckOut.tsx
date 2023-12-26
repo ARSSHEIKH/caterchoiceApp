@@ -387,12 +387,13 @@ const CheckOut = React.memo(() => {
           {extra?.shipping_method == 1 &&
             <>
               <View style={[styles.row]}>
-                <Text>Pickup Date </Text>
+                <Text>Pickup Date: </Text>
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Pressable onPress={() => setVisible(true)}>
+                    <Pressable style={[styles.row]} onPress={() => setVisible(true)}>
                       <Text>{moment(extra?.pickup_date).format('YYYY-MM-DD') || "Select Date"} </Text>
+                      <Icon name='down' pack='assets' />
                     </Pressable>
                   )}
                   name="pickup_date"
@@ -405,7 +406,7 @@ const CheckOut = React.memo(() => {
               >
                 {(slots || []).map((item, key) => (
                   // <View>
-                    <Radio style={styles.slotOption} key={key}>{item}</Radio>
+                  <Radio style={styles.slotOption} key={key}>{item}</Radio>
                   // </View>
                 ))}
 
@@ -502,12 +503,14 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 20,
+    // padding: 50,
+    // marginHorizontal: 5,
     // backgroundColor: 'aqua'
     justifyContent: 'space-evenly'
   },
   slotOption: {
-    paddingHorizontal: 10,
+    width: "27%",
+    paddingHorizontal: 5,
     paddingVertical: 6,
     elevation: 1,
     shadowColor: '#000',

@@ -20,6 +20,10 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
   const { image, name, tags, price, price_sale, is_sale, is_favourite, p_price } = item;
   const images = image?.split(',');
 
+  console.log('====================================');
+  console.log("images", images);
+  console.log('====================================');
+
   const theme = useTheme();
   const { t } = useTranslation();
 

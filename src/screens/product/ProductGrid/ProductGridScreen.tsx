@@ -18,14 +18,14 @@ import BannerProductGrid from './components/BannerProductGrid';
 import { RootStackParamList } from 'navigation/types';
 import { Grid_Types_Enum, ProductFragment, IProductItemState } from 'constants/types';
 import { data_banner_product_grid, products_list, recent_list } from 'constants/data';
-import {fetchProduct, productSelector} from "../../../store/slices/productSlice";
+import { fetchProduct, fetchPromotions, productSelector } from "../../../store/slices/productSlice";
 import { useAppDispatch, useAppSelector } from 'store/store';
 
 let onEndReachedCalledDuringMomentum = true;
 let page = 1;
-let timer:any;
+let timer: any;
 
-const ProductGridScreen = React.memo(({route}) => {
+const ProductGridScreen = React.memo(({ route }) => {
   const theme = useTheme();
   const { t } = useTranslation(['common', 'product']);
   const { width } = useLayout();
@@ -39,24 +39,25 @@ const ProductGridScreen = React.memo(({route}) => {
   const [search, setSearch] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(true);
   const [type, setType] = React.useState<Grid_Types_Enum>(Grid_Types_Enum.Column);
-  const {data} = useAppSelector(productSelector);
+  const { data } = useAppSelector(productSelector);
 
-  const {id, name} = Object.assign({}, route?.params?.category);
+  const { id, name } = Object.assign({}, route?.params?.category);
 
+  const fetchProducts = async (page: number, params:Object) => {
+    return route?.params?.isPromotion ? await dispatch(fetchPromotions(page)) : await dispatch(fetchProduct(page, params))
+  }
 
-
+  console.log('====================================');
+  console.log("data", data);
+  console.log('====================================');
 
   React.useEffect(() => {
     onEndReachedCalledDuringMomentum = true;
     page = 1;
-
     const product = async () => {
       setLoading(true);
-      const json = await dispatch(fetchProduct(page,{
-        category_id:id
-      }));
+      const json = await fetchProducts(page, {category_id: 1})
       setLoading(false);
-      
     }
     product();
   }, []);
@@ -64,11 +65,11 @@ const ProductGridScreen = React.memo(({route}) => {
   const applyFilter = (s) => {
     page = 1;
     clearTimeout(timer);
-    timer = setTimeout(async() => {
+    timer = setTimeout(async () => {
       setLoading(true);
-      const json = await dispatch(fetchProduct(page,{
-        category_id:id,
-        search:s
+      const json = await dispatch(fetchProducts(page, {
+        category_id: id,
+        search: s
       }));
       setLoading(false);
     }, 100);
@@ -78,24 +79,24 @@ const ProductGridScreen = React.memo(({route}) => {
     return <BannerProductGrid item={item} />;
   }, []);
 
-  const onEndReached = React.useCallback(async()=>{
+  const onEndReached = React.useCallback(async () => {
 
-    if(!onEndReachedCalledDuringMomentum){
+    if (!onEndReachedCalledDuringMomentum) {
       page++;
-      const json = await dispatch(fetchProduct(page,{
-        category_id:id
+      const json = await dispatch(fetchProduct(page, {
+        category_id: id
       }));
       onEndReachedCalledDuringMomentum = true;
-  }
+    }
   }, []);
 
-  const productSearch = (s:string) => {
-    setSearch(s);    
+  const productSearch = (s: string) => {
+    setSearch(s);
     applyFilter(s);
   }
 
 
-  const renderHeader = 
+  const renderHeader =
     () => (
       <View>
         {/* <Carousel
@@ -116,7 +117,7 @@ const ProductGridScreen = React.memo(({route}) => {
           style={styles.search}
           status="search"
           value={search}
-          onChangeText={(e)=>setSearch(e)}
+          onChangeText={(e) => setSearch(e)}
           placeholder={'Search... '}
           accessoryLeft={<Icon pack="assets" name="search" />}
           accessoryRight={(props) => (
@@ -156,13 +157,13 @@ const ProductGridScreen = React.memo(({route}) => {
                 marginRight: index % 2 !== 0 ? 16 : 8,
               }}
               item={item}
-              onPress={() => navigate('Product', { screen: 'ProductDetails', params:{item:item} })}
+              onPress={() => navigate('Product', { screen: 'ProductDetails', params: { item: item } })}
             />
           ) : (
             <ProductHorizontal
               item={item}
               style={styles.productHorizontal}
-              onPress={() => navigate('Product', { screen: 'ProductDetails', params:{item:item}  })}
+              onPress={() => navigate('Product', { screen: 'ProductDetails', params: { item: item } })}
             />
           )}
         </View>
@@ -191,28 +192,28 @@ const ProductGridScreen = React.memo(({route}) => {
         }
       />
       <Input
-          style={styles.search}
-          status="search"
-          value={search}
-          onChangeText={productSearch}
-          placeholder={'Search... '}
-          accessoryLeft={<Icon pack="assets" name="search" />}
-          accessoryRight={(props) => (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={[styles.filter, { borderColor: theme['background-basic-color-5'] }]}
-              onPress={() => bottomSheetPhotoRef.current?.expand()}>
-              <Icon {...props} pack="assets" name="filter" />
-            </TouchableOpacity>
-          )}
-        />
+        style={styles.search}
+        status="search"
+        value={search}
+        onChangeText={productSearch}
+        placeholder={'Search... '}
+        accessoryLeft={<Icon pack="assets" name="search" />}
+        accessoryRight={(props) => (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[styles.filter, { borderColor: theme['background-basic-color-5'] }]}
+            onPress={() => bottomSheetPhotoRef.current?.expand()}>
+            <Icon {...props} pack="assets" name="filter" />
+          </TouchableOpacity>
+        )}
+      />
       {type === Grid_Types_Enum.Column ? (
         <FlatList
           data={data || []}
           numColumns={2}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
-         // ListHeaderComponent={renderHeader}
+          // ListHeaderComponent={renderHeader}
           keyExtractor={(item) => `${item.id}`}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.5}

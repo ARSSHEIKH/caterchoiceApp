@@ -2,11 +2,8 @@ import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { useTheme, Button } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import FastImage from 'react-native-fast-image';
-
 import Text from './Text';
 import ProductHorizontal from './ProductHorizontal';
-
 import { OrderFragment } from 'constants/types';
 
 interface OrderItemProps {

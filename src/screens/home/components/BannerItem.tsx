@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground, View } from 'react-native';
 import { Button } from '@ui-kitten/components';
-import {banner_uri} from "constants/common"
+import { banner_uri } from "constants/common"
 import FastImage from 'react-native-fast-image';
 import { Text } from 'components';
 
@@ -15,11 +15,11 @@ interface BannerItemProps {
 const BannerItem = ({ item, onPress }: BannerItemProps) => {
   const { title, description, button, image } = item;
   console.log("image", image);
-  
+
 
   return (
     <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={onPress}>
-      <FastImage style={styles.image} source={{ uri: "https://cater-choice-assets.s3.eu-west-2.amazonaws.com/"+image }}>
+      <FastImage style={styles.image} source={{ uri: "https://cater-choice-assets.s3.eu-west-2.amazonaws.com/" + image }}>
         <View style={styles.content}>
           {/* <Text category="h4" marginTop={16}>
             {title}

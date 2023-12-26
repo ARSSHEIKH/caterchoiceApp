@@ -3,35 +3,37 @@ import { RootState } from '../rootReducer';
 import Api from "services/api";
 
 export interface IProductItemState {
-    id: number;
-    name:string;
-    code:string;
-    ms_id:string;
-    type:string;
-    brand_id:number;
-    pack_size:string;
-    cost:number;
-    price:number;
-    qty:number;
-    image:string;
-  }
+  id: number;
+  name: string;
+  code: string;
+  ms_id: string;
+  type: string;
+  brand_id: number;
+  pack_size: string;
+  cost: number;
+  price: number;
+  qty: number;
+  image: string;
+}
 
 export interface IProductState {
-   data: Array<IProductItemState>;
-   featured: object;
-   total:number;
-   is_more:boolean;
-   loader:boolean;
-   error:object
+  data: Array<IProductItemState>;
+  featured: object;
+  total: number;
+  is_more: boolean;
+  loader: boolean;
+  error: object
+  promotions: Array<IProductItemState>;
 }
 
 export const initialState: IProductState = {
-    data: [],
-    featured:{},
-    total:0,
-    is_more:false,
-    loader:false,
-    error:{}
+  data: [],
+  featured: {},
+  total: 0,
+  is_more: false,
+  loader: false,
+  error: {},
+
 };
 
 export const productSlice = createSlice({
@@ -46,16 +48,16 @@ export const productSlice = createSlice({
     setFeatured: (state: IProductState, { payload }: PayloadAction<any>) => {
       return (state = {
         ...state,
-        featured:{
+        featured: {
           ...state.featured,
-          [payload.name]:payload.data
+          [payload.name]: payload.data
         }
       });
     },
     setMoreProduct: (state: IProductState, { payload }: PayloadAction<any>) => {
-        state.data = state.data.concat(payload.data);
-        state.total = payload.total;
-        state.is_more = payload.is_more;
+      state.data = state.data.concat(payload.data);
+      state.total = payload.total;
+      state.is_more = payload.is_more;
     },
     setError: (state: IProductState, { payload }: PayloadAction<any>) => {
       state.error = payload;
@@ -73,33 +75,53 @@ export const productSlice = createSlice({
   },
 });
 
-export const fetchProduct = (page:number, params:object) => async (dispatch:any) => {
+export const fetchProduct = (page: number, params: object) => async (dispatch: any) => {
   dispatch(setError({}));
   dispatch(setLoader(true));
   const json = await Api.product(page, params);
-  if(json.status==200){
-    if(page>1){
-        dispatch(setMoreProduct(json.data));
+  if (json.status == 200) {
+    if (page > 1) {
+      dispatch(setMoreProduct(json.data));
     } else {
-        dispatch(setProduct(json.data));
+      dispatch(setProduct(json.data));
     }
-    
-  } else if(json.status==422) {
+
+  } else if (json.status == 422) {
     dispatch(setError(json.data));
   }
   dispatch(setLoader(false));
   return json;
 };
 
-export const fetchFeatured = (page:number, name:string, params:object) => async (dispatch:any) => {
+export const fetchFeatured = (page: number, name: string, params: object) => async (dispatch: any) => {
   const json = await Api.product(page, params);
-  if(json.status==200){
-    dispatch(setFeatured({data:json.data.data, name:name}));
+  if (json.status == 200) {
+    dispatch(setFeatured({ data: json.data.data, name: name }));
   }
   return json;
 };
 
-export const { setProduct, setMoreProduct, setLoader ,setError, setFeatured, setFavourite  } = productSlice.actions;
+export const fetchPromotions = (page: number) => async (dispatch: any) => {
+  dispatch(setError({}));
+  dispatch(setLoader(true));
+  const json = await Api.productPromotions(page);
+  console.log("json", json)
+  if (json.status == 200) {
+    if (page > 1) {
+      dispatch(setMoreProduct(json.data?.data));
+    } else {
+      dispatch(setProduct(json.data?.data));
+    }
+
+  } else if (json.status == 422) {
+    dispatch(setError(json.data?.error
+      ));
+  }
+  dispatch(setLoader(false));
+  return json;
+};
+
+export const { setProduct, setMoreProduct, setLoader, setError, setFeatured, setFavourite, set } = productSlice.actions;
 
 export const productSelector = (state: RootState) => state.product;
 

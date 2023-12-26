@@ -19,7 +19,7 @@ interface ProductHorizontalProps {
 const ProductHorizontal = ({ item, style, onPress }: ProductHorizontalProps) => {
   const { image, name, tags, price, price_sale, is_sale, p_price } = item;
   const images = image?.split(',');
-
+  
   return (
     <TouchableOpacity activeOpacity={0.7} style={[styles.container, style]} onPress={onPress}>
       <View style={[styles.imageView, { height: 100 }]}>
