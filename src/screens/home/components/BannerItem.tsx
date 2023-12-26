@@ -19,7 +19,7 @@ const BannerItem = ({ item, onPress }: BannerItemProps) => {
 
   return (
     <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={onPress}>
-      <FastImage style={styles.image} source={{ uri: "https://cater-choice-assets.s3.eu-west-2.amazonaws.com/" + image }}>
+      <FastImage style={styles.image} source={{ uri: image }}>
         <View style={styles.content}>
           {/* <Text category="h4" marginTop={16}>
             {title}
