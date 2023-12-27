@@ -82,8 +82,10 @@ const CheckOut = React.memo(() => {
   }
 
   React.useEffect(() => {
+    console.log("extra?.shipping_method", extra?.shipping_method);
+
     if (!("shipping_method" in extra)) {
-      addForm("shipping_method", 0);
+      addForm("shipping_method", 1);
     }
 
   }, [extra?.shipping_method]);
@@ -406,7 +408,7 @@ const CheckOut = React.memo(() => {
               >
                 {(slots || []).map((item, key) => (
                   // <View>
-                  <Radio style={styles.slotOption} key={key}>{item}</Radio>
+                    <Radio style={styles.slotOption} key={key}>{item}</Radio>
                   // </View>
                 ))}
 
@@ -442,7 +444,7 @@ const CheckOut = React.memo(() => {
 
           }
           }
-        //date={typeof extra?.pickup_date == "object"?extra?.pickup_date:new Date(extra?.pickup_date)}
+          date={typeof (extra?.pickup_date) == "object" ? extra?.pickup_date : new Date(extra?.pickup_date)}
         />
       </Modal>
     </Container>
@@ -503,13 +505,13 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    // padding: 50,
-    // marginHorizontal: 5,
+    paddingBottom: 50,
+    marginHorizontal: 15,
     // backgroundColor: 'aqua'
-    justifyContent: 'space-evenly'
+    // justifyContent: 'space-evenly'
   },
   slotOption: {
-    width: "27%",
+    width: "30%",
     paddingHorizontal: 5,
     paddingVertical: 6,
     elevation: 1,
