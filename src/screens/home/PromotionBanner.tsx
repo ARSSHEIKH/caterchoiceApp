@@ -4,26 +4,39 @@ import FastImage from 'react-native-fast-image'
 import { fetchPromotions, productSelector } from 'store/slices/productSlice';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { ICollection } from 'constants/types';
-import { CollectionItem } from 'components';
+import { CollectionItem, TitleBar } from 'components';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from 'navigation/types';
+import { useTranslation } from 'react-i18next';
 export default function PromotionBanner() {
     const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
+    const { t } = useTranslation(['common', 'home']);
     return (
-        <TouchableOpacity activeOpacity={0.7} style={styles.iconView} onPress={() => navigate('Product', { screen: 'ProductGrid', params:{
-            isPromotion: true
-        } })}>
-            <FastImage style={styles.image} source={{ uri: "https://cater-choice-assets.s3.eu-west-2.amazonaws.com/storage/banners/Manhattan_Web_Banner.jpeg" }}>
-                <View style={styles.content}>
+        <>
+            <TitleBar
+        marginTop={32}
+        marginBottom={16}
+                paddingHorizontal={16}
+                title={t('Promotions')}
+                textStyle={{ color: "#ce1212" }}
+            />
+            <TouchableOpacity activeOpacity={0.7} style={styles.iconView} onPress={() => navigate('Product', {
+                screen: 'ProductGrid', params: {
+                    isPromotion: true
+                }
+            })}>
+                <FastImage style={styles.image} source={{ uri: "https://cater-choice-assets.s3.eu-west-2.amazonaws.com/storage/banners/Manhattan_Web_Banner.jpeg" }}>
+                    <View style={styles.content}>
 
-                    {/* <Text category="h4" marginTop={16}>
+                        {/* <Text category="h4" marginTop={16}>
         {title}
       </Text> */}
-                    {/* {description && <Text status="content">{description}</Text>} */}
-                    {/* {button && <Button {...button} />} */}
-                </View>
-            </FastImage>
-        </TouchableOpacity>
+                        {/* {description && <Text status="content">{description}</Text>} */}
+                        {/* {button && <Button {...button} />} */}
+                    </View>
+                </FastImage>
+            </TouchableOpacity>
+        </>
     )
 }
 

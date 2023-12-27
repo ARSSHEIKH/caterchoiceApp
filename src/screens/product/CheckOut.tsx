@@ -90,6 +90,12 @@ const CheckOut = React.memo(() => {
 
   }, [extra?.shipping_method]);
 
+  React.useEffect(() => {
+    if (!("pickup_date" in extra)) {
+      addForm("pickup_date", (new Date()).toISOString());
+    }
+  }, []);
+
   const addForm = (key: any, value: any): void => {
     const form: any = Object.assign({}, extra);
     form[key] = value;
@@ -210,6 +216,7 @@ const CheckOut = React.memo(() => {
       0
     ).toFixed(2);
   }
+  console.log("extra?.pickup_date", extra?.pickup_date);
 
   return (
     <Container>
@@ -408,7 +415,7 @@ const CheckOut = React.memo(() => {
               >
                 {(slots || []).map((item, key) => (
                   // <View>
-                    <Radio style={styles.slotOption} key={key}>{item}</Radio>
+                  <Radio style={styles.slotOption} key={key}>{item}</Radio>
                   // </View>
                 ))}
 
@@ -438,13 +445,15 @@ const CheckOut = React.memo(() => {
         <Calendar
           style={{ backgroundColor: "#fff", borderRadius: 0 }}
           onSelect={nextDate => {
+            console.log("nextDate", nextDate);
+            
             addForm("pickup_date", (nextDate))
             setVisible(false);
             availableSlots(nextDate);
 
           }
           }
-          date={typeof (extra?.pickup_date) == "object" ? extra?.pickup_date : new Date(extra?.pickup_date)}
+          date={extra?.pickup_date ? typeof (extra?.pickup_date) == "object" ? extra?.pickup_date : new Date(extra?.pickup_date) : new Date()}
         />
       </Modal>
     </Container>
