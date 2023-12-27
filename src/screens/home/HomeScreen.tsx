@@ -103,31 +103,20 @@ const HomeScreen = React.memo(() => {
   const renderFooter = () => (
     <View>
       {/* <Frame /> */}
-      <TitleBar
-        marginTop={32}
-        marginBottom={20}
-        paddingHorizontal={16}
-        title={t('Our Menu')}
-        textStyle={{ color: "#ce1212" }}
-      />
-      <TitleBar
+      {/* <TitleBar
         marginTop={1}
         marginBottom={10}
         paddingHorizontal={16}
         title={t('Check Our Products')}
         textStyle={{ fontSize: 20 }}
-      />
+      /> */}
 
 
     <PromotionBanner />
 
-
-
-
-
       <TitleBar
-        marginTop={10}
-        marginBottom={10}
+        marginTop={32}
+        marginBottom={16}
         paddingHorizontal={16}
         title={t('DRINKS')}
         accessoryRight={{
@@ -159,7 +148,7 @@ const HomeScreen = React.memo(() => {
           onPress: () => navigate('Product', { screen: 'ProductGrid', params: { category: { name: "BAKERY", id: 4 } } }),
         }}
       />
-      <View style={styles.padding}>
+      {/* <View style={styles.padding}> */}
         <FlatList
           data={featured?.bakery || []}
           horizontal
@@ -175,7 +164,7 @@ const HomeScreen = React.memo(() => {
           decelerationRate="fast"
         />
       </View>
-    </View>
+    // </View>
   );
 
   return (
