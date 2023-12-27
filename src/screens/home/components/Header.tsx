@@ -98,7 +98,7 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 24,
+    marginBottom: 8,
   },
   contentBanner: {
     paddingLeft: 16,

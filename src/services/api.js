@@ -71,6 +71,19 @@
     }
   };
 
+  static productPromotions = async (page, query) => {
+    let params = { page: page };
+
+    try {
+      const response = await axios.get("https://cater-choice.com/api"+"/product/product-promotions", {params:params, headers:{
+        "Authorization":"Bearer 60|y02g3zujf5iipKOhGcc7gVzVm5eNlOUpp3AbB4E8"
+      }});
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
 
   static order = async (page, query) => {
     let params = { page: page };

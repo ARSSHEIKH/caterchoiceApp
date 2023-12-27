@@ -2,11 +2,8 @@ import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { useTheme, Button } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import FastImage from 'react-native-fast-image';
-
 import Text from './Text';
 import ProductHorizontal from './ProductHorizontal';
-
 import { OrderFragment } from 'constants/types';
 
 interface OrderItemProps {
@@ -26,7 +23,6 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { reference_no, sale_status, items } = item;
-
   return (
     <View
       style={[styles.container, { borderBottomColor: theme['background-basic-color-4'] }, style]}>
@@ -37,7 +33,7 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
         <Text category="c2">{sale_status}</Text>
       </View>
       {(items || []).map((i, idx) => {
-        return <ProductHorizontal key={idx} item={(i?.product || {})} />;
+        return <ProductHorizontal key={idx} item={(i?.product || {})} type={i?.type} />;
       })}
       <View style={styles.row1}>
         {buttonLeft &&

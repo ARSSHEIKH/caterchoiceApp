@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, FlatList } from 'react-native';
+import { View, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import {
   CollectionItem,
   Container,
@@ -22,8 +22,10 @@ import keyExtractor from 'utils/keyExtractor';
 import { ICollection, ProductFragment } from 'constants/types';
 import { collections, products_list, recent_list } from 'constants/data';
 import { RootStackParamList } from 'navigation/types';
-import {fetchFeatured, productSelector} from "../../store/slices/productSlice";
+import { fetchFeatured, fetchPromotions, productSelector } from "../../store/slices/productSlice";
 import { useAppDispatch, useAppSelector } from 'store/store';
+import FastImage from 'react-native-fast-image';
+import PromotionBanner from './PromotionBanner';
 
 const HomeScreen = React.memo(() => {
   const { openDrawer } = useDrawer();
@@ -31,7 +33,7 @@ const HomeScreen = React.memo(() => {
   const { width, top, bottom } = useLayout();
   const { t } = useTranslation(['common', 'home']);
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
-  const {featured} = useAppSelector(productSelector);
+  const { featured } = useAppSelector(productSelector);
 
   const [loading, setLoading] = React.useState<boolean>(true);
 
@@ -39,13 +41,14 @@ const HomeScreen = React.memo(() => {
 
     const products = async () => {
       setLoading(true);
-      const json = await dispatch(fetchFeatured(1, "drinks",  {category_id:1}));
-      dispatch(fetchFeatured(1, "bakery",  {category_id:4}))
+      const json = await dispatch(fetchFeatured(1, "drinks", { category_id: 1 }));
+      dispatch(fetchFeatured(1, "bakery", { category_id: 4 }))
       setLoading(false);
     }
     products();
 
   }, []);
+
 
   const renderItem = React.useCallback(
     ({ item, index }: { item: ProductFragment; index: number }) => {
@@ -67,7 +70,7 @@ const HomeScreen = React.memo(() => {
             marginBottom: 16,
           }}
           item={item}
-          onPress={() => navigate('Product', { screen: 'ProductDetails', params:{item:item} })}
+          onPress={() => navigate('Product', { screen: 'ProductDetails', params: { item: item } })}
         />
       );
     },
@@ -100,28 +103,25 @@ const HomeScreen = React.memo(() => {
   const renderFooter = () => (
     <View>
       {/* <Frame /> */}
-      <TitleBar
-        marginTop={32}
-        marginBottom={20}
-        paddingHorizontal={16}
-        title={t('Our Menu')}
-        textStyle={{color:"#ce1212"}}
-      />
-      <TitleBar
+      {/* <TitleBar
         marginTop={1}
         marginBottom={10}
         paddingHorizontal={16}
         title={t('Check Our Products')}
-        textStyle={{fontSize:20}}
-      />
+        textStyle={{ fontSize: 20 }}
+      /> */}
+
+
+    <PromotionBanner />
+
       <TitleBar
-        marginTop={10}
-        marginBottom={10}
+        marginTop={32}
+        marginBottom={16}
         paddingHorizontal={16}
         title={t('DRINKS')}
         accessoryRight={{
           title: t('common:view_all'),
-          onPress: () => navigate('Product', { screen: 'ProductGrid', params:{category:{name:"DRINKS", id:1}} }),
+          onPress: () => navigate('Product', { screen: 'ProductGrid', params: { category: { name: "DRINKS", id: 1 } } }),
         }}
       />
       <FlatList
@@ -145,26 +145,26 @@ const HomeScreen = React.memo(() => {
         title={t('BAKERY')}
         accessoryRight={{
           title: t('common:view_all'),
-          onPress: () => navigate('Product', { screen: 'ProductGrid', params:{category:{name:"BAKERY", id:4}} }),
+          onPress: () => navigate('Product', { screen: 'ProductGrid', params: { category: { name: "BAKERY", id: 4 } } }),
         }}
       />
-      <View style={styles.padding}>
-      <FlatList
-        data={featured?.bakery || []}
-        horizontal
-        renderItem={renderItem}
-        //renderItem={renderCollectionItem}
-        keyExtractor={keyExtractor}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.contentBestSeller}
-        scrollEventThrottle={16}
-        snapToInterval={width - (24 + 84 - 12)}
-        bounces={false}
-        pagingEnabled={false}
-        decelerationRate="fast"
-      />
+      {/* <View style={styles.padding}> */}
+        <FlatList
+          data={featured?.bakery || []}
+          horizontal
+          renderItem={renderItem}
+          //renderItem={renderCollectionItem}
+          keyExtractor={keyExtractor}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.contentBestSeller}
+          scrollEventThrottle={16}
+          snapToInterval={width - (24 + 84 - 12)}
+          bounces={false}
+          pagingEnabled={false}
+          decelerationRate="fast"
+        />
       </View>
-    </View>
+    // </View>
   );
 
   return (

@@ -47,9 +47,6 @@ const CartItem: React.FC<CartItemProps> = ({
 
   const images = image?.split(',');
 
-  console.log("quantity", quantity);
-  
-
   const borderColor = theme['background-basic-color-3'];
 
   React.useEffect(() => {

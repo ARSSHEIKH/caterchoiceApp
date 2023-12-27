@@ -140,7 +140,7 @@ const [selectedVariant, setSelectedVariant] = useState(0)
   }, []);
 
   const addToCart = () => {
-    dispatch(addCart({...item, variant:priceVariants[selectedVariant].name}));
+    dispatch(addCart({...item, variant:priceVariants[selectedVariant].name, type:selectedVariant==0?'SINGLE':'CASE'}));
     setAdded(true);
     //navigate('MyCart')
   }
@@ -394,6 +394,7 @@ const [selectedVariant, setSelectedVariant] = useState(0)
             onPress={addToCart}
           /> : <Button
             children={t('Add to cart').toString()}
+            disabled={(selectedVariant==0?item?.price:item?.p_price) <= 0}
             style={styles.button}
             onPress={addToCart}
           />}

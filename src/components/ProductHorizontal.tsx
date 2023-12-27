@@ -7,17 +7,18 @@ import FastImage from 'react-native-fast-image';
 
 import SvgSale from 'assets/svgs/SvgSale';
 import { ProductFragment } from 'constants/types';
-import {cdn, currency} from "constants/common";
+import { cdn, currency } from "constants/common";
 
 
 interface ProductHorizontalProps {
   style?: ViewStyle;
   item: ProductFragment;
+  type?: 'SINGLE' | 'CASE'
   onPress?(): void;
 }
 
-const ProductHorizontal = ({ item, style, onPress }: ProductHorizontalProps) => {
-  const { image, name, tags, price, price_sale, is_sale } = item;
+const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProps) => {
+  const { image, name, tags, price, price_sale, is_sale, p_price } = item;
   const images = image?.split(',');
 
   return (
@@ -38,12 +39,46 @@ const ProductHorizontal = ({ item, style, onPress }: ProductHorizontalProps) => 
         <Text category="b3" marginTop={4} numberOfLines={2}>
           {name}
         </Text>
-        <View style={styles.priceView}>
-          {/* <Text category="b2">{currency}{price_sale}</Text> */}
-          <Text category="c3" status="placeholder" marginLeft={4} marginTop={3} line_through>
-            {currency}{price}
-          </Text>
-        </View>
+        {/* <Text category="b2">{currency}{price_sale}</Text> */}
+        {type ?
+          (
+            <View style={styles.priceViewContainer}>
+              <View style={styles.priceView}>
+                <Text category="b3" status="placeholder" marginLeft={4} marginTop={3}>
+                {type == 'SINGLE' ? 'Single' : 'Pack'}
+                </Text>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  {currency}{type == 'SINGLE' ? price : p_price}
+                </Text>
+              </View>
+              {/* <View style={{width: '70%', alignItems: 'flex-end'}}>
+                <Text category="t1" status="placeholder" marginLeft={4} marginTop={3}>
+                  {type == 'SINGLE' ? 'Single' : 'Pack'}
+                </Text>
+              </View> */}
+            </View>
+          ) :
+          (
+            <View style={styles.priceViewContainer}>
+              <View style={styles.priceView}>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  Single
+                </Text>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  {currency}{price}
+                </Text>
+              </View>
+              <View style={styles.priceView}>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  Pack
+                </Text>
+                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                  {currency}{p_price}
+                </Text>
+              </View>
+            </View>
+          )
+        }
       </View>
       {is_sale && (
         <View style={styles.saleTag}>
@@ -104,10 +139,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 16,
   },
-  priceView: {
+  priceViewContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 8,
+    // justifyContent: 'center',
+    // backgroundColor: 'aqua',
+    // gap: 10,
+  },
+  priceView: {
+    marginLeft: 10,
   },
   tagLoading: {
     marginTop: 16,
