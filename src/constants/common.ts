@@ -10,3 +10,4 @@ export const  cdn = "https://sale.cater-choice.com/storage/";
 export const  banner_uri = "https://sale.cater-choice.com/banners/";
 export const  category_uri = "https://sale.cater-choice.com/public/images/category/";
 export const currency = "£";
+export const paymentUrl = "https://cater-choice.com/mobile/payment" 

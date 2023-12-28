@@ -9,31 +9,63 @@ import { products_list } from 'constants/data';
 import { ProductFragment } from 'constants/types';
 import { RootStackParamList } from 'navigation/types';
 
-import {fetchProduct, productSelector} from "../../../../store/slices/productSlice";
+import { fetchProduct, productSelector } from "../../../../store/slices/productSlice";
 import { useAppDispatch, useAppSelector } from 'store/store';
+import { userSelector } from 'store/slices/userSlice';
 
 let onEndReachedCalledDuringMomentum = true;
 let page = 1;
+function findCommonItems(array1, array2) {
+  var commonItems = [];
+  try {
 
+    for (var i = 0; i < array1.length; i++) {
+      var currentItem = array1[i].id
+      console.log('====================================');
+      console.log("commonItems", currentItem);
+      console.log('====================================');
+      
+      if (array2?.indexOf(currentItem) !== -1) {
+        commonItems.push(array1[i]);
+      }
+    }
+  } catch (error) {
+
+  }
+  return commonItems;
+}
 const RecentView: React.FC = () => {
   const { width, bottom } = useLayout();
+  const { user } = useAppSelector(userSelector);
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
-  const {data} = useAppSelector(productSelector);
+  const { data } = useAppSelector(productSelector);
+  const [recentlyViewed, setRecentlyViewed] = React.useState([])
 
-  const onEndReached = React.useCallback(async()=>{
+  React.useEffect(() => {
+    dispatch(fetchProduct());
+  }, [user])
 
-    if(!onEndReachedCalledDuringMomentum){
+  React.useEffect(() => {
+
+    setRecentlyViewed(JSON.parse(user?.recently_viewed))
+    // console.log("recently_viewed", data)
+    // let items = findCommonItems(data, user?.recently_viewed);
+
+    // setRecentlyViewed(items)
+  }, [user?.recently_viewed])
+
+  const onEndReached = React.useCallback(async () => {
+return
+    if (!onEndReachedCalledDuringMomentum) {
       page++;
-      const json = await dispatch(fetchProduct(page,{
-        wishlist:true
-      }));
+      const json = await dispatch(fetchProduct(page));
       onEndReachedCalledDuringMomentum = true;
-  }
+    }
   }, []);
 
   const renderItem = React.useCallback(
@@ -66,16 +98,16 @@ const RecentView: React.FC = () => {
   return (
     <View style={[styles.container, { width: width }]}>
       <FlatList
-          data={data || []}
-          numColumns={2}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => `${item.id}`}
-          onEndReached={onEndReached}
-          onEndReachedThreshold={0.5}
-          onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
+        data={recentlyViewed || []}
+        numColumns={2}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => `${item.id}`}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
+        onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
 
-        />
+      />
     </View>
   );
 };

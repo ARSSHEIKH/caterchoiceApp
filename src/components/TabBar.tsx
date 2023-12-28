@@ -42,7 +42,7 @@ const TabBar: React.FC<TabBarProps> = ({ style, selectedTab, data, onPress }) =>
           opacity: 1,
         }}
         transition={{
-          duration: 0,
+          duration: 1,
           transform: {
             type: 'timing',
             duration: 200,

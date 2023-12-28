@@ -34,15 +34,17 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import { addCart } from "../../store/slices/orderSlice";
 import { setFavourite } from "../../store/slices/productSlice";
 import { cdn, currency } from "constants/common";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUser, userSelector } from 'store/slices/userSlice';
 
 export const priceVariants = [
   {
     id: 1,
-    name:"Single"
+    name: "Single"
   },
   {
     id: 2,
-    name:"Pack"
+    name: "Pack"
   },
 ]
 const ProductDetails = React.memo(({ route }) => {
@@ -50,6 +52,7 @@ const ProductDetails = React.memo(({ route }) => {
   const theme = useTheme();
   const { width, bottom } = useLayout();
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector(userSelector);
   const { t } = useTranslation(['common', 'product_details']);
   const { navigate } = useNavigation<NavigationProp<ProductStackParamList>>();
   const { navigate: _navigate } = useNavigation<NavigationProp<RootStackParamList>>();
@@ -59,7 +62,7 @@ const ProductDetails = React.memo(({ route }) => {
   const [colorSelected, setColorSelected] = React.useState<string>('#B5E4CA');
   const [isFavourite, setIsFavourite] = React.useState<boolean>(item?.is_favourite);
   const [added, setAdded] = React.useState<boolean>(false);
-const [selectedVariant, setSelectedVariant] = useState(0)
+  const [selectedVariant, setSelectedVariant] = useState(0)
 
   let photos: string[] = [];
   const images = item?.image?.split(',');
@@ -67,13 +70,37 @@ const [selectedVariant, setSelectedVariant] = useState(0)
     photos.push(item);
   });
 
-
   React.useEffect(() => {
-    setAdded(false)
+    // setAdded(false)
     setTimeout(() => {
       setLoading(false);
+      let recently_viewed = user?.recently_viewed ?? []
+      const findIndex = user?.recently_viewed?.findIndex(r => r == item?.id)
+      if (findIndex !== -1 && findIndex != undefined) {
+        return
+      }
+      else {
+        if (item && item.id) {
+          try {
+            recently_viewed.push(item);
+
+            const storeUser = {
+              ...user,
+              recently_viewed
+            }
+
+            dispatch(setUser(storeUser))
+            AsyncStorage.setItem("user", JSON.stringify(storeUser))
+          } catch (error) {
+
+          }
+        } else {
+          // Handle the case where item or item.id is undefined or null
+          console.error("Item or item.id is undefined or null");
+        }
+      }
     }, 3000);
-  }, []);
+  }, [item]);
 
   const ship_details = React.useMemo(
     () => [
@@ -140,7 +167,7 @@ const [selectedVariant, setSelectedVariant] = useState(0)
   }, []);
 
   const addToCart = () => {
-    dispatch(addCart({...item, variant:priceVariants[selectedVariant].name, type:selectedVariant==0?'SINGLE':'CASE'}));
+    dispatch(addCart({ ...item, variant: priceVariants[selectedVariant].name, type: selectedVariant == 0 ? 'SINGLE' : 'CASE' }));
     setAdded(true);
     //navigate('MyCart')
   }
@@ -183,7 +210,7 @@ const [selectedVariant, setSelectedVariant] = useState(0)
             </TouchableOpacity>
           </Animated.View>
           <View style={styles.row1}>
-            
+
             <View style={styles.flexOne}>
               {/* <View style={styles.row2}>
                 {Array(5)
@@ -201,26 +228,26 @@ const [selectedVariant, setSelectedVariant] = useState(0)
                   (212)
                 </Text>
               </View> */}
-            
+
               <Text category="h6" marginTop={8} marginRight={16}>
                 {item?.name}
               </Text>
             </View>
-            <Text category="h3">{currency}{selectedVariant==0?item?.price:item?.p_price}</Text>
-            
+            <Text category="h3">{currency}{selectedVariant == 0 ? item?.price : item?.p_price}</Text>
+
           </View>
-          
-          
+
+
 
           <RadioGroup style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
-            paddingLeft:20
-          }} selectedIndex={selectedVariant} onChange={(index)=>{setSelectedVariant(index); setAdded(false)}} >
-              {
-                priceVariants?.map((v)=><Radio>{v?.name}</Radio>)
-              }
-            </RadioGroup>
+            paddingLeft: 20
+          }} selectedIndex={selectedVariant} onChange={(index) => { setSelectedVariant(index); setAdded(false) }} >
+            {
+              priceVariants?.map((v) => <Radio>{v?.name}</Radio>)
+            }
+          </RadioGroup>
           {/* <Text category="t1" marginTop={24} marginBottom={12} marginLeft={16}>
             {t('product_details:select_color')}
           </Text>
@@ -388,13 +415,13 @@ const [selectedVariant, setSelectedVariant] = useState(0)
       <Layout style={[styles.bottomView, { paddingBottom: bottom + 16 + 48 }]}>
         {added ?
           <Button
-          disabled={added}
+            disabled={added}
             children={t('Added').toString()}
             style={[styles.button, { backgroundColor: "#ccc" }]}
             onPress={addToCart}
           /> : <Button
             children={t('Add to cart').toString()}
-            disabled={(selectedVariant==0?item?.price:item?.p_price) <= 0}
+            disabled={(selectedVariant == 0 ? item?.price : item?.p_price) <= 0}
             style={styles.button}
             onPress={addToCart}
           />}
