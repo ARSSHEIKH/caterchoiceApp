@@ -30,23 +30,13 @@ const ProductInformation = React.memo(({ route }) => {
   ];
 
 
-  console.log('====================================');
-  console.log("item?.product_details", item?.ingredients);
-  console.log('====================================');
-  const source = {
-    html: `<p>;saks</p>`
-  };
-  return (
-    <>
-      <WebView
-        originWhitelist={['*']}
-        source={{ html: '<p>Here I am</p>' }}
-      />
-      <HTMLView
-        value={item?.ingredients}
-        stylesheet={styles}
-      />
-    </>)
+  const convertToHtml = (content) => (
+    <RenderHTML
+      contentWidth={width}
+      source={{ html: content }}
+    />
+  )
+
   return (
 
     <Container>
@@ -65,10 +55,7 @@ const ProductInformation = React.memo(({ route }) => {
         </Text> */}
 
             <View style={styles?.container} >
-              <RenderHTML
-                contentWidth={width}
-                source={item?.description}
-              />
+              {convertToHtml(item?.description)}
             </View>
             <Divider style={styles.line} />
           </>
@@ -77,10 +64,7 @@ const ProductInformation = React.memo(({ route }) => {
         {!!item?.ingredients &&
           <>
             <Text category="t1">{t('product_details:Ingredients')}</Text>
-            <RenderHTML
-              contentWidth={width}
-              source={source}
-            />
+            {convertToHtml(item?.ingredients)}
             <Divider style={styles.line} />
           </>
         }
@@ -88,9 +72,7 @@ const ProductInformation = React.memo(({ route }) => {
         {!!item?.allergens &&
           <>
             <Text category="t1">{t('product_details:Allergens')}</Text>
-            <Text marginTop={4} category="b1" status="placeholder">
-              {item?.allergens}
-            </Text>
+              {convertToHtml(item?.allergens)}
             <Divider style={styles.line} />
           </>
         }
@@ -103,10 +85,7 @@ const ProductInformation = React.memo(({ route }) => {
             </Text>
              */}
             <View style={styles?.container} >
-              <RenderHTML
-                contentWidth={width}
-                source={{ html: item?.packing_info }}
-              />
+               {convertToHtml(item?.allergens)}
             </View>
             <Divider style={styles.line} />
           </>
