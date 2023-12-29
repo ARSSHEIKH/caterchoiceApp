@@ -144,7 +144,7 @@ const MyCart = React.memo(() => {
       <TopNavigation
         title={t('common:my_cart').toString()}
         accessoryLeft={<NavigationAction />}
-        accessoryRight={<NavigationAction icon="share" onPress={() => {}} />}
+        // accessoryRight={<NavigationAction icon="share" onPress={() => {}} />}
       />
       <FlatList
         data={cart}

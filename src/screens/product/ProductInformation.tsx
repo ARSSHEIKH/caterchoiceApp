@@ -6,11 +6,17 @@ import { useTranslation } from 'react-i18next';
 import { useLayout } from 'hooks';
 
 import { data_tags } from 'constants/data';
+import RenderHTML from 'react-native-render-html';
+import { useWindowDimensions } from 'react-native';
+import HTMLView from 'react-native-htmlview';
+import { WebView } from 'react-native-webview';
 
-const ProductInformation = React.memo(({route}) => {
+
+const ProductInformation = React.memo(({ route }) => {
   const theme = useTheme();
   const { bottom } = useLayout();
   const { t } = useTranslation(['common', 'product_details']);
+  const { width } = useWindowDimensions();
 
   const item = Object.assign({}, route?.params?.item);
 
@@ -23,7 +29,26 @@ const ProductInformation = React.memo(({route}) => {
     'Using technology in high temperature, have high side after many uses.',
   ];
 
+
+  console.log('====================================');
+  console.log("item?.product_details", item?.ingredients);
+  console.log('====================================');
+  const source = {
+    html: `<p>;saks</p>`
+  };
   return (
+    <>
+      <WebView
+        originWhitelist={['*']}
+        source={{ html: '<p>Here I am</p>' }}
+      />
+      <HTMLView
+        value={item?.ingredients}
+        stylesheet={styles}
+      />
+    </>)
+  return (
+
     <Container>
       <TopNavigation
         title={t('product_details:product_detail')}
@@ -32,46 +57,61 @@ const ProductInformation = React.memo(({route}) => {
       <Content
         isPadding
         contentContainerStyle={[styles.contentContainerStyle, { paddingBottom: bottom + 16 }]}>
-        {!!item?.product_details &&
-        <>
-        <Text category="t1">{t('product_details:Description')}</Text>
-        <Text marginTop={4} category="b1" status="placeholder">
-          {item?.product_details}
-        </Text>
-        <Divider style={styles.line} />
-        </>
+        {!!item?.description &&
+          <>
+            <Text category="t1">{t('product_details:Description')}</Text>
+            {/* <Text marginTop={4} category="b1" status="placeholder">
+          {item?.description}
+        </Text> */}
+
+            <View style={styles?.container} >
+              <RenderHTML
+                contentWidth={width}
+                source={item?.description}
+              />
+            </View>
+            <Divider style={styles.line} />
+          </>
         }
 
         {!!item?.ingredients &&
-        <>
-        <Text category="t1">{t('product_details:Ingredients')}</Text>
-        <Text marginTop={4} category="b1" status="placeholder">
-          {item?.ingredients}
-        </Text>
-        <Divider style={styles.line} />
-        </>
+          <>
+            <Text category="t1">{t('product_details:Ingredients')}</Text>
+            <RenderHTML
+              contentWidth={width}
+              source={source}
+            />
+            <Divider style={styles.line} />
+          </>
         }
 
         {!!item?.allergens &&
-        <>
-        <Text category="t1">{t('product_details:Allergens')}</Text>
-        <Text marginTop={4} category="b1" status="placeholder">
-          {item?.allergens}
-        </Text>
-        <Divider style={styles.line} />
-        </>
+          <>
+            <Text category="t1">{t('product_details:Allergens')}</Text>
+            <Text marginTop={4} category="b1" status="placeholder">
+              {item?.allergens}
+            </Text>
+            <Divider style={styles.line} />
+          </>
         }
 
-      {!!item?.packing_info &&
-        <>
-        <Text category="t1">{t('Pack Size')}</Text>
-        <Text marginTop={4} category="b1" status="placeholder">
-          {item?.packing_info}
-        </Text>
-        <Divider style={styles.line} />
-        </>
+        {!!item?.packing_info &&
+          <>
+            <Text category="t1">{t('Pack Size')}</Text>
+            {/* <Text marginTop={4} category="b1" status="placeholder">
+              {item?.packing_info}
+            </Text>
+             */}
+            <View style={styles?.container} >
+              <RenderHTML
+                contentWidth={width}
+                source={{ html: item?.packing_info }}
+              />
+            </View>
+            <Divider style={styles.line} />
+          </>
         }
-        
+
         {/* <Text category="t1">{t('product_details:about_items')}</Text>
         {data.map((item, index) => {
           return (
@@ -131,5 +171,5 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     paddingTop: 24,
-  },
+  }
 });
