@@ -24,7 +24,7 @@ function findCommonItems(array1, array2) {
       console.log('====================================');
       console.log("commonItems", currentItem);
       console.log('====================================');
-      
+
       if (array2?.indexOf(currentItem) !== -1) {
         commonItems.push(array1[i]);
       }
@@ -51,8 +51,10 @@ const RecentView: React.FC = () => {
   }, [user])
 
   React.useEffect(() => {
-
-    setRecentlyViewed(JSON.parse(user?.recently_viewed))
+console.log('====================================');
+console.log("user?.recently_viewed ", user?.recently_viewed );
+console.log('====================================');
+    // setRecentlyViewed(user?.recently_viewed ? JSON.parse(user?.recently_viewed) : [])
     // console.log("recently_viewed", data)
     // let items = findCommonItems(data, user?.recently_viewed);
 
@@ -60,7 +62,7 @@ const RecentView: React.FC = () => {
   }, [user?.recently_viewed])
 
   const onEndReached = React.useCallback(async () => {
-return
+    return
     if (!onEndReachedCalledDuringMomentum) {
       page++;
       const json = await dispatch(fetchProduct(page));

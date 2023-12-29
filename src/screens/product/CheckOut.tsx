@@ -82,8 +82,6 @@ const CheckOut = React.memo(() => {
   }
 
   React.useEffect(() => {
-    console.log("extra?.shipping_method", extra?.shipping_method);
-
     if (!("shipping_method" in extra)) {
       addForm("shipping_method", 1);
     }
@@ -92,7 +90,9 @@ const CheckOut = React.memo(() => {
 
   React.useEffect(() => {
     if (!("pickup_date" in extra)) {
-      addForm("pickup_date", (new Date()).toISOString());
+      const currentDate = (new Date()).toISOString();
+      addForm("pickup_date",currentDate);
+      availableSlots(currentDate)
     }
   }, []);
 
@@ -139,7 +139,7 @@ const CheckOut = React.memo(() => {
           ],
         },
       })
-      openLink(json?.data?.data?.order_id)
+      openLink(json?.data?.data?.id)
     }
 
   }

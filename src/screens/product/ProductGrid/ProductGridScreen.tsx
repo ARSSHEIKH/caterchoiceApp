@@ -78,7 +78,6 @@ const ProductGridScreen = React.memo(({ route }) => {
   }, []);
 
   const onEndReached = React.useCallback(async () => {
-    alert('more')
     if (!onEndReachedCalledDuringMomentum && !isLoadingMore && is_more) {
       page++;
       const json = await dispatch(fetchProduct(page, {

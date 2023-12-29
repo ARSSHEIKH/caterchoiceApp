@@ -1573,6 +1573,7 @@ drawable src_assets_images_image_master
 drawable src_assets_images_image_star
 drawable src_assets_images_image_success
 drawable src_assets_images_image_success_2
+drawable src_assets_images_promotionbanner
 drawable test_custom_background
 drawable test_level_drawable
 drawable tooltip_frame_dark
@@ -3065,7 +3066,6 @@ styleable View android_theme android_focusable paddingEnd paddingStart theme
 styleable ViewBackgroundHelper android_background backgroundTint backgroundTintMode
 styleable ViewPager2 android_orientation
 styleable ViewStubCompat android_id android_layout android_inflatedId
-xml file_provider_paths
 xml image_share_filepaths
 xml imagepicker_provider_paths
 xml rn_dev_preferences
