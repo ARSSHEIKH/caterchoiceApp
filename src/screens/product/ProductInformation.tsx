@@ -4,12 +4,8 @@ import { Container, Content, NavigationAction, TagItem, Text } from 'components'
 import { useTheme, TopNavigation, Divider, Layout } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from 'hooks';
-
-import { data_tags } from 'constants/data';
 import RenderHTML from 'react-native-render-html';
 import { useWindowDimensions } from 'react-native';
-import HTMLView from 'react-native-htmlview';
-import { WebView } from 'react-native-webview';
 
 
 const ProductInformation = React.memo(({ route }) => {
