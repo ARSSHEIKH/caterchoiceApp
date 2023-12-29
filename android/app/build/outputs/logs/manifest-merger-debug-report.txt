@@ -21,6 +21,7 @@ MERGED from [:react-native-maps] D:\react-native-projects\caterchoiceApp\node_mo
 MERGED from [:react-native-safe-area-context] D:\react-native-projects\caterchoiceApp\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-screens] D:\react-native-projects\caterchoiceApp\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-svg] D:\react-native-projects\caterchoiceApp\node_modules\react-native-svg\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-21:12
 MERGED from [com.facebook.react:react-native:0.70.6] C:\Users\SHAH\.gradle\caches\transforms-3\0b825f9a3cd84cf1738e48fbfed11fea\transformed\jetified-react-native-0.70.6-debug\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\SHAH\.gradle\caches\transforms-3\4aa3daa4c119e5ebf154ad11d072f485\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.facebook.react:hermes-engine:0.70.6] C:\Users\SHAH\.gradle\caches\transforms-3\9d7eb90167c45c49ac02b1539a4fe443\transformed\jetified-hermes-engine-0.70.6-debug\AndroidManifest.xml:2:1-9:12
@@ -58,6 +59,7 @@ MERGED from [com.github.Dimezis:BlurView:version-2.0.2] C:\Users\SHAH\.gradle\ca
 MERGED from [androidx.core:core-ktx:1.6.0] C:\Users\SHAH\.gradle\caches\transforms-3\9644fb1c4cab9aa0d403c9f34e6ea78e\transformed\jetified-core-ktx-1.6.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.exifinterface:exifinterface:1.3.3] C:\Users\SHAH\.gradle\caches\transforms-3\dabeb127ebcf68c206ca5581e62d75f6\transformed\exifinterface-1.3.3\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\SHAH\.gradle\caches\transforms-3\499913aa779d5677f84de1b3821854aa\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\SHAH\.gradle\caches\transforms-3\741cf2d34c873c8e864caa328e982ec0\transformed\webkit-1.4.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.sqlite:sqlite:2.1.0] C:\Users\SHAH\.gradle\caches\transforms-3\6c2e0b04a335666cd4b78cb912868b2a\transformed\sqlite-2.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.gms:play-services-location:20.0.0] C:\Users\SHAH\.gradle\caches\transforms-3\78c57395196967b06c6cb2d5c289c699\transformed\jetified-play-services-location-20.0.0\AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.android.gms:play-services-maps:18.0.2] C:\Users\SHAH\.gradle\caches\transforms-3\5b94eed69c74e072e7c17c8facb87462\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:17:1-44:12
@@ -133,6 +135,8 @@ MERGED from [:react-native-image-picker] D:\react-native-projects\caterchoiceApp
 MERGED from [:react-native-image-picker] D:\react-native-projects\caterchoiceApp\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
 MERGED from [:react-native-inappbrowser-reborn] D:\react-native-projects\caterchoiceApp\node_modules\react-native-inappbrowser-reborn\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:5-22:19
 MERGED from [:react-native-inappbrowser-reborn] D:\react-native-projects\caterchoiceApp\node_modules\react-native-inappbrowser-reborn\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:5-22:19
+MERGED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
+MERGED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
 MERGED from [com.facebook.react:react-native:0.70.6] C:\Users\SHAH\.gradle\caches\transforms-3\0b825f9a3cd84cf1738e48fbfed11fea\transformed\jetified-react-native-0.70.6-debug\AndroidManifest.xml:9:5-20
 MERGED from [com.facebook.react:react-native:0.70.6] C:\Users\SHAH\.gradle\caches\transforms-3\0b825f9a3cd84cf1738e48fbfed11fea\transformed\jetified-react-native-0.70.6-debug\AndroidManifest.xml:9:5-20
 MERGED from [com.facebook.soloader:soloader:0.10.4] C:\Users\SHAH\.gradle\caches\transforms-3\87826452408345e9fcde9828ee0fb34c\transformed\jetified-soloader-0.10.4\AndroidManifest.xml:11:5-20
@@ -259,6 +263,8 @@ MERGED from [:react-native-screens] D:\react-native-projects\caterchoiceApp\node
 MERGED from [:react-native-screens] D:\react-native-projects\caterchoiceApp\node_modules\react-native-screens\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-svg] D:\react-native-projects\caterchoiceApp\node_modules\react-native-svg\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-svg] D:\react-native-projects\caterchoiceApp\node_modules\react-native-svg\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.70.6] C:\Users\SHAH\.gradle\caches\transforms-3\0b825f9a3cd84cf1738e48fbfed11fea\transformed\jetified-react-native-0.70.6-debug\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.70.6] C:\Users\SHAH\.gradle\caches\transforms-3\0b825f9a3cd84cf1738e48fbfed11fea\transformed\jetified-react-native-0.70.6-debug\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] C:\Users\SHAH\.gradle\caches\transforms-3\4aa3daa4c119e5ebf154ad11d072f485\transformed\swiperefreshlayout-1.0.0\AndroidManifest.xml:20:5-44
@@ -333,6 +339,8 @@ MERGED from [androidx.exifinterface:exifinterface:1.3.3] C:\Users\SHAH\.gradle\c
 MERGED from [androidx.exifinterface:exifinterface:1.3.3] C:\Users\SHAH\.gradle\caches\transforms-3\dabeb127ebcf68c206ca5581e62d75f6\transformed\exifinterface-1.3.3\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\SHAH\.gradle\caches\transforms-3\499913aa779d5677f84de1b3821854aa\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\SHAH\.gradle\caches\transforms-3\499913aa779d5677f84de1b3821854aa\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\SHAH\.gradle\caches\transforms-3\741cf2d34c873c8e864caa328e982ec0\transformed\webkit-1.4.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\SHAH\.gradle\caches\transforms-3\741cf2d34c873c8e864caa328e982ec0\transformed\webkit-1.4.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.sqlite:sqlite:2.1.0] C:\Users\SHAH\.gradle\caches\transforms-3\6c2e0b04a335666cd4b78cb912868b2a\transformed\sqlite-2.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.sqlite:sqlite:2.1.0] C:\Users\SHAH\.gradle\caches\transforms-3\6c2e0b04a335666cd4b78cb912868b2a\transformed\sqlite-2.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.gms:play-services-location:20.0.0] C:\Users\SHAH\.gradle\caches\transforms-3\78c57395196967b06c6cb2d5c289c699\transformed\jetified-play-services-location-20.0.0\AndroidManifest.xml:5:5-44
@@ -461,6 +469,16 @@ ADDED from [:react-native-inappbrowser-reborn] D:\react-native-projects\catercho
 		ADDED from [:react-native-inappbrowser-reborn] D:\react-native-projects\caterchoiceApp\node_modules\react-native-inappbrowser-reborn\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-37
 	android:name
 		ADDED from [:react-native-inappbrowser-reborn] D:\react-native-projects\caterchoiceApp\node_modules\react-native-inappbrowser-reborn\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-81
+provider#com.reactnativecommunity.webview.RNCWebViewFileProvider
+ADDED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-18:20
+	android:grantUriPermissions
+		ADDED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-47
+	android:authorities
+		ADDED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-64
+	android:exported
+		ADDED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-37
+	android:name
+		ADDED from [:react-native-webview] D:\react-native-projects\caterchoiceApp\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-83
 uses-permission#android.permission.WAKE_LOCK
 ADDED from [androidx.work:work-runtime:2.7.1] C:\Users\SHAH\.gradle\caches\transforms-3\3bc811facf50ede55bc8298072e0374d\transformed\work-runtime-2.7.1\AndroidManifest.xml:25:5-68
 	android:name

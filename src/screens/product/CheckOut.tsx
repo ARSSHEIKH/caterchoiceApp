@@ -224,7 +224,7 @@ const CheckOut = React.memo(() => {
       <TopNavigation
         title={t('common:check_out').toString()}
         accessoryLeft={<NavigationAction />}
-        accessoryRight={<NavigationAction icon="option" />}
+        // accessoryRight={<NavigationAction icon="option" />}
       />
       <Content contentContainerStyle={{ paddingBottom: bottomButton }}>
         <KeyboardAvoidingView
