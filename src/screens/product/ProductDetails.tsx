@@ -236,9 +236,6 @@ const ProductDetails = React.memo(({ route }) => {
             <Text category="h3">{currency}{selectedVariant == 0 ? item?.price : item?.p_price}</Text>
 
           </View>
-
-
-
           <RadioGroup style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
@@ -397,6 +394,7 @@ const ProductDetails = React.memo(({ route }) => {
           </View>
         }
       />
+      <View style={{paddingBottom: 95}}>
       <FlatList
         data={[]}
         numColumns={2}
@@ -412,6 +410,7 @@ const ProductDetails = React.memo(({ route }) => {
           paddingBottom: bottom + 16 + 48 + 25,
         }}
       />
+      </View>
       <Layout style={[styles.bottomView, { paddingBottom: bottom + 16 + 48 }]}>
         {added ?
           <Button

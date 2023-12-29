@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { Container, NavigationAction, ProductHorizontal, ProductItem } from 'components';
 import { useTheme, TopNavigation, Input, Icon } from '@ui-kitten/components';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -39,11 +39,12 @@ const ProductGridScreen = React.memo(({ route }) => {
   const [search, setSearch] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(true);
   const [type, setType] = React.useState<Grid_Types_Enum>(Grid_Types_Enum.Column);
-  const { data } = useAppSelector(productSelector);
+  const [isLoadingMore, setIsLoadingMore] = React.useState<boolean>(false);
+  const { data, is_more } = useAppSelector(productSelector);
 
   const { id, name } = Object.assign({}, route?.params?.category);
 
-  const fetchProducts = async (page: number, params:Object) => {
+  const fetchProducts = async (page: number, params: Object) => {
     return route?.params?.isPromotion ? await dispatch(fetchPromotions(page)) : await dispatch(fetchProduct(page, params))
   }
 
@@ -53,7 +54,7 @@ const ProductGridScreen = React.memo(({ route }) => {
     page = 1;
     const product = async () => {
       setLoading(true);
-      const json = await fetchProducts(page, {category_id: 1})
+      const json = await fetchProducts(page, { category_id: 1 })
       setLoading(false);
     }
     product();
@@ -77,12 +78,13 @@ const ProductGridScreen = React.memo(({ route }) => {
   }, []);
 
   const onEndReached = React.useCallback(async () => {
-
-    if (!onEndReachedCalledDuringMomentum) {
+    alert('more')
+    if (!onEndReachedCalledDuringMomentum && !isLoadingMore && is_more) {
       page++;
       const json = await dispatch(fetchProduct(page, {
         category_id: id
       }));
+      setIsLoadingMore(false)
       onEndReachedCalledDuringMomentum = true;
     }
   }, []);
@@ -204,33 +206,37 @@ const ProductGridScreen = React.memo(({ route }) => {
           </TouchableOpacity>
         )}
       />
-      {type === Grid_Types_Enum.Column ? (
-        <FlatList
-          data={data || []}
-          numColumns={2}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          // ListHeaderComponent={renderHeader}
-          keyExtractor={(item) => `${item.id}`}
-          onEndReached={onEndReached}
-          onEndReachedThreshold={0.5}
-          onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
+      <View style={{ marginBottom: 195 }}>
 
-        />
-      ) : (
-        <View>
+        {type === Grid_Types_Enum.Column ? (
           <FlatList
             data={data || []}
+            numColumns={2}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
-            //ListHeaderComponent={renderHeader}
+            // ListHeaderComponent={renderHeader}
             keyExtractor={(item) => `${item.id}`}
             onEndReached={onEndReached}
             onEndReachedThreshold={0.5}
             onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
+            ListFooterComponent={!isLoadingMore && is_more ? <ActivityIndicator size={28} /> : null}
           />
-        </View>
-      )}
+        ) : (
+          <View>
+            <FlatList
+              data={data || []}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+              //ListHeaderComponent={renderHeader}
+              keyExtractor={(item) => `${item.id}`}
+              onEndReached={onEndReached}
+              onEndReachedThreshold={0.5}
+              onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
+              ListFooterComponent={!isLoadingMore && is_more ? <ActivityIndicator size={28} /> : null}
+            />
+          </View>
+        )}
+      </View>
       <BottomSheet
         ref={bottomSheetPhotoRef}
         snapPoints={animatedSnapPoints}
