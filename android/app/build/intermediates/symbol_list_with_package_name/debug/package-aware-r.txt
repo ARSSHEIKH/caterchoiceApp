@@ -1573,6 +1573,7 @@ drawable src_assets_images_image_master
 drawable src_assets_images_image_star
 drawable src_assets_images_image_success
 drawable src_assets_images_image_success_2
+drawable src_assets_images_promotionbanner
 drawable test_custom_background
 drawable test_level_drawable
 drawable tooltip_frame_dark

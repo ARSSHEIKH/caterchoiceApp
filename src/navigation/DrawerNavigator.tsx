@@ -20,6 +20,7 @@ import { useAppDispatch } from 'store/store';
 
 import { Images } from 'assets/images';
 import { DrawerStackParamList, RootStackParamList } from './types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { Navigator, Screen } = createDrawerNavigator<DrawerStackParamList>();
 
@@ -58,6 +59,7 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = () => {
 
   const logout = React.useCallback(async () => {
     adispatch(userLogout(undefined));
+    AsyncStorage.clear()
     await signOut();
     nextScreen('Auth');
   }, [signOut]);

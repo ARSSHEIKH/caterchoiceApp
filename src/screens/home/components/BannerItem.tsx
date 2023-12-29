@@ -17,7 +17,7 @@ const BannerItem = ({ item, onPress }: BannerItemProps) => {
 
 
   return (
-    <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={onPress}>
+    <TouchableOpacity activeOpacity={0.7} style={[styles.container, {backgroundColor: 'aqua'}]} onPress={onPress}>
       <FastImage style={styles.image} source={{ uri: image }}>
         <View style={styles.content}>
           {/* <Text category="h4" marginTop={16}>

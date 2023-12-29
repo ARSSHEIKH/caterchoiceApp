@@ -508,6 +508,10 @@
         "source": "com.dakota.app-main-39:/drawable-mdpi/src_assets_icons_ic_google.png"
     },
     {
+        "merged": "com.dakota.app-merged_res-37:/drawable-mdpi_src_assets_images_promotionbanner.jpeg.flat",
+        "source": "com.dakota.app-main-39:/drawable-mdpi/src_assets_images_promotionbanner.jpeg"
+    },
+    {
         "merged": "com.dakota.app-merged_res-37:/drawable-xhdpi_src_assets_icons_ic_upload.png.flat",
         "source": "com.dakota.app-main-39:/drawable-xhdpi/src_assets_icons_ic_upload.png"
     },
@@ -568,12 +572,12 @@
         "source": "com.dakota.app-main-39:/drawable-mdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
     },
     {
-        "merged": "com.dakota.app-merged_res-37:/drawable-mdpi_src_assets_icons_ic_option.png.flat",
-        "source": "com.dakota.app-main-39:/drawable-mdpi/src_assets_icons_ic_option.png"
-    },
-    {
         "merged": "com.dakota.app-merged_res-37:/drawable-xhdpi_src_assets_icons_ic_pick_up.png.flat",
         "source": "com.dakota.app-main-39:/drawable-xhdpi/src_assets_icons_ic_pick_up.png"
+    },
+    {
+        "merged": "com.dakota.app-merged_res-37:/drawable-mdpi_src_assets_icons_ic_option.png.flat",
+        "source": "com.dakota.app-main-39:/drawable-mdpi/src_assets_icons_ic_option.png"
     },
     {
         "merged": "com.dakota.app-merged_res-37:/drawable-xhdpi_src_assets_icons_ic_column.png.flat",

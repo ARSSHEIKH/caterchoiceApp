@@ -41,9 +41,9 @@ export const productSlice = createSlice({
   initialState,
   reducers: {
     setProduct: (state: IProductState, { payload }: PayloadAction<any>) => {
-      state.data = payload.data;
-      state.total = payload.total;
-      state.is_more = payload.is_more;
+      state.data = payload?.data??payload;
+      state.total = payload?.total;
+      state.is_more = payload?.is_more;
     },
     setFeatured: (state: IProductState, { payload }: PayloadAction<any>) => {
       return (state = {

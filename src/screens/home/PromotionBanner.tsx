@@ -25,7 +25,7 @@ export default function PromotionBanner() {
                     isPromotion: true
                 }
             })}>
-                <FastImage style={styles.image} source={{ uri: "https://cater-choice-assets.s3.eu-west-2.amazonaws.com/storage/banners/Manhattan_Web_Banner.jpeg" }}>
+                <FastImage style={styles.image} source={require("../../assets/images/promotion-banner.jpeg")}>
                     <View style={styles.content}>
 
                         {/* <Text category="h4" marginTop={16}>

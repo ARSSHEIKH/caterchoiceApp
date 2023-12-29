@@ -26,6 +26,7 @@ import { fetchFeatured, fetchPromotions, productSelector } from "../../store/sli
 import { useAppDispatch, useAppSelector } from 'store/store';
 import FastImage from 'react-native-fast-image';
 import PromotionBanner from './PromotionBanner';
+import { userSelector } from 'store/slices/userSlice';
 
 const HomeScreen = React.memo(() => {
   const { openDrawer } = useDrawer();
@@ -34,6 +35,7 @@ const HomeScreen = React.memo(() => {
   const { t } = useTranslation(['common', 'home']);
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
   const { featured } = useAppSelector(productSelector);
+  const { user } = useAppSelector(userSelector)
 
   const [loading, setLoading] = React.useState<boolean>(true);
 
@@ -47,7 +49,7 @@ const HomeScreen = React.memo(() => {
     }
     products();
 
-  }, []);
+  }, [user?.access_token]);
 
 
   const renderItem = React.useCallback(
@@ -112,7 +114,7 @@ const HomeScreen = React.memo(() => {
       /> */}
 
 
-    <PromotionBanner />
+      <PromotionBanner />
 
       <TitleBar
         marginTop={32}
@@ -149,21 +151,21 @@ const HomeScreen = React.memo(() => {
         }}
       />
       {/* <View style={styles.padding}> */}
-        <FlatList
-          data={featured?.bakery || []}
-          horizontal
-          renderItem={renderItem}
-          //renderItem={renderCollectionItem}
-          keyExtractor={keyExtractor}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.contentBestSeller}
-          scrollEventThrottle={16}
-          snapToInterval={width - (24 + 84 - 12)}
-          bounces={false}
-          pagingEnabled={false}
-          decelerationRate="fast"
-        />
-      </View>
+      <FlatList
+        data={featured?.bakery || []}
+        horizontal
+        renderItem={renderItem}
+        //renderItem={renderCollectionItem}
+        keyExtractor={keyExtractor}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.contentBestSeller}
+        scrollEventThrottle={16}
+        snapToInterval={width - (24 + 84 - 12)}
+        bounces={false}
+        pagingEnabled={false}
+        decelerationRate="fast"
+      />
+    </View>
     // </View>
   );
 

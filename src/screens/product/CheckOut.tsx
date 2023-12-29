@@ -19,7 +19,7 @@ import { useForm, Controller } from 'react-hook-form';
 import moment from 'moment';
 
 import { Images } from 'assets/images';
-import { currency } from "../../constants/common";
+import { currency, paymentUrl } from "../../constants/common";
 import keyExtractor from 'utils/keyExtractor';
 import { RootStackParamList } from 'navigation/types';
 import { addressSelector } from 'store/slices/addressSlice';
@@ -82,8 +82,6 @@ const CheckOut = React.memo(() => {
   }
 
   React.useEffect(() => {
-    console.log("extra?.shipping_method", extra?.shipping_method);
-
     if (!("shipping_method" in extra)) {
       addForm("shipping_method", 1);
     }
@@ -92,7 +90,9 @@ const CheckOut = React.memo(() => {
 
   React.useEffect(() => {
     if (!("pickup_date" in extra)) {
-      addForm("pickup_date", (new Date()).toISOString());
+      const currentDate = (new Date()).toISOString();
+      addForm("pickup_date",currentDate);
+      availableSlots(currentDate)
     }
   }, []);
 
@@ -115,7 +115,6 @@ const CheckOut = React.memo(() => {
     data['extra'] = extra;
     const json = await dispatch(submitOrder(data));
     if (json.status == 200) {
-      // openLink(json?.data?.data)
       navigate('ModalScreen', {
         modalScreen: {
           status: 'success',
@@ -140,20 +139,22 @@ const CheckOut = React.memo(() => {
           ],
         },
       })
+      openLink(json?.data?.data?.id)
     }
 
   }
 
-  const openLink = async (data: any) => {
+  const openLink = async (order_id: any) => {
+    const backgroundColor = "#000"
 
     try {
 
-      const url = `${web}/mobile/checkout/${data?.id}`;
+      const url = `${paymentUrl}/${order_id}`;
       if (await InAppBrowser.isAvailable()) {
         await InAppBrowser.close();
         const result = await InAppBrowser.open(url, {
           // iOS Properties
-          preferredBarTintColor: '#ce1212',
+          preferredBarTintColor: '#453AA4',
           preferredControlTintColor: 'white',
           readerMode: false,
           animated: true,
@@ -163,10 +164,10 @@ const CheckOut = React.memo(() => {
           enableBarCollapsing: false,
           // Android Properties
           showTitle: true,
-          toolbarColor: '#6200EE',
-          secondaryToolbarColor: 'black',
-          navigationBarColor: 'black',
-          navigationBarDividerColor: 'white',
+          toolbarColor: backgroundColor,
+          secondaryToolbarColor: backgroundColor,
+          // navigationBarColor: 'black',
+          // navigationBarDividerColor: 'white',
           enableUrlBarHiding: true,
           enableDefaultShare: true,
           forceCloseOnRedirection: false,
@@ -223,7 +224,7 @@ const CheckOut = React.memo(() => {
       <TopNavigation
         title={t('common:check_out').toString()}
         accessoryLeft={<NavigationAction />}
-        accessoryRight={<NavigationAction icon="option" />}
+        // accessoryRight={<NavigationAction icon="option" />}
       />
       <Content contentContainerStyle={{ paddingBottom: bottomButton }}>
         <KeyboardAvoidingView

@@ -55,7 +55,7 @@
 
   static product = async (page, query) => {
     let params = { page: page };
-    if (Object.keys(query).length > 0) {
+    if (query && Object.keys(query).length > 0) {
       Object.keys(query).map((value) => {
         if (query[value]) {
           params[value] = query[value];
