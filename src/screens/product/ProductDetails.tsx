@@ -236,9 +236,6 @@ const ProductDetails = React.memo(({ route }) => {
             <Text category="h3">{currency}{selectedVariant == 0 ? item?.price : item?.p_price}</Text>
 
           </View>
-
-
-
           <RadioGroup style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
