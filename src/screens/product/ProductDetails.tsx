@@ -394,6 +394,7 @@ const ProductDetails = React.memo(({ route }) => {
           </View>
         }
       />
+      <View style={{paddingBottom: 95}}>
       <FlatList
         data={[]}
         numColumns={2}
@@ -409,6 +410,7 @@ const ProductDetails = React.memo(({ route }) => {
           paddingBottom: bottom + 16 + 48 + 25,
         }}
       />
+      </View>
       <Layout style={[styles.bottomView, { paddingBottom: bottom + 16 + 48 }]}>
         {added ?
           <Button
