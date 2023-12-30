@@ -29,6 +29,7 @@ import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import { Linking } from 'react-native'
 import { web } from '../../constants/common';
 import { actualPrice } from 'screens/order/MyCart';
+import { openLink } from 'utils/openLink';
 
 
 
@@ -139,57 +140,10 @@ const CheckOut = React.memo(() => {
           ],
         },
       })
-      openLink(json?.data?.data?.id)
+      const url = `${paymentUrl}/${json?.data?.data?.id}`;
+      openLink(url)
     }
 
-  }
-
-  const openLink = async (order_id: any) => {
-    const backgroundColor = "#000"
-
-    try {
-
-      const url = `${paymentUrl}/${order_id}`;
-      if (await InAppBrowser.isAvailable()) {
-        await InAppBrowser.close();
-        const result = await InAppBrowser.open(url, {
-          // iOS Properties
-          preferredBarTintColor: '#453AA4',
-          preferredControlTintColor: 'white',
-          readerMode: false,
-          animated: true,
-          modalPresentationStyle: 'fullScreen',
-          modalTransitionStyle: 'coverVertical',
-          modalEnabled: true,
-          enableBarCollapsing: false,
-          // Android Properties
-          showTitle: true,
-          toolbarColor: backgroundColor,
-          secondaryToolbarColor: backgroundColor,
-          // navigationBarColor: 'black',
-          // navigationBarDividerColor: 'white',
-          enableUrlBarHiding: true,
-          enableDefaultShare: true,
-          forceCloseOnRedirection: false,
-          // Specify full animation resource identifier(package:anim/name)
-          // or only resource name(in case of animation bundled with app).
-          animations: {
-            startEnter: 'slide_in_right',
-            startExit: 'slide_out_left',
-            endEnter: 'slide_in_left',
-            endExit: 'slide_out_right'
-          },
-          headers: {
-            'my-custom-header': 'my custom header value'
-          }
-        });
-
-        InAppBrowser.close();
-
-      }
-      else Linking.openURL(url)
-    } catch (error) {
-    }
   }
 
   const {
@@ -217,7 +171,6 @@ const CheckOut = React.memo(() => {
       0
     ).toFixed(2);
   }
-  console.log("extra?.pickup_date", extra?.pickup_date);
 
   return (
     <Container>
@@ -414,7 +367,7 @@ const CheckOut = React.memo(() => {
                 selectedIndex={(extra?.slot)}
                 onChange={index => addForm("slot", index)}
               >
-                {(slots || []).map((item, key) => (
+                {(slots || [])?.map((item, key) => (
                   // <View>
                   <Radio style={styles.slotOption} key={key}>{item}</Radio>
                   // </View>
@@ -426,7 +379,7 @@ const CheckOut = React.memo(() => {
 
         </KeyboardAvoidingView>
         <View style={styles.form}>
-          {(Object.keys(error) || []).map((item, key) => (
+          {(Object.keys(error) || [])?.map((item, key) => (
             <Text style={{ color: "red", fontSize: 13 }} key={key}>{(error?.[item]?.[0] || "").replace("extra.", "")}</Text>
           ))}
         </View>

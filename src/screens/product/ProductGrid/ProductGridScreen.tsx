@@ -54,7 +54,7 @@ const ProductGridScreen = React.memo(({ route }) => {
     page = 1;
     const product = async () => {
       setLoading(true);
-      const json = await fetchProducts(page, { category_id: 1 })
+      const json = await fetchProducts(page, { category_id: id })
       setLoading(false);
     }
     product();

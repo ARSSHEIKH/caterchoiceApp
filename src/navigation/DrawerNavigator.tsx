@@ -21,6 +21,7 @@ import { useAppDispatch } from 'store/store';
 import { Images } from 'assets/images';
 import { DrawerStackParamList, RootStackParamList } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { openLink } from 'utils/openLink';
 
 const { Navigator, Screen } = createDrawerNavigator<DrawerStackParamList>();
 
@@ -73,17 +74,17 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = () => {
       title: t('my_order').toString(),
       onPress: () => navigate('MyOrder'),
     },
-    // {
-    //   title: t('my_card').toString(),
-    //   onPress: () => _navigate('Product', { screen: 'MyCard' }),
-    // },
-    // {
-    //   title: t('address_shipping').toString(),
-    //   onPress: () => _navigate('Product', { screen: 'MyAddress' }),
-    // },
     {
       title: t('terms_conditions').toString(),
-      onPress: () => navigate('TermOfUse'),
+      onPress: () => openLink(`https://cater-choice.com/terms_and_condition/`)
+    },
+    {
+      title: t('About us').toString(),
+      onPress: () => openLink(`https://cater-choice.com/aboutus`)
+    },
+    {
+      title: t('Contact us').toString(),
+      onPress: () => openLink(`https://cater-choice.com/contact`)
     },
   ];
 
