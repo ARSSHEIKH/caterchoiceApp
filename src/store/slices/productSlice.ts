@@ -68,7 +68,7 @@ export const productSlice = createSlice({
     setFavourite: (state: IProductState, { payload }: PayloadAction<any>) => {
       const todo = state.data.find((item) => item.id === payload.id);
       if (todo) {
-        todo.is_favourite = !todo.is_favourite;
+        todo.is_wishlist = !todo.is_wishlist;
       }
 
     },

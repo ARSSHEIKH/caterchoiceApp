@@ -18,7 +18,7 @@ interface ProductHorizontalProps {
 }
 
 const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProps) => {
-  const { image, name, tags, price, price_sale, is_sale, p_price } = item;
+  const { image, name, tags, price, price_sale, is_sale, p_price, is_wishlist } = item;
   const images = image?.split(',');
 
   return (

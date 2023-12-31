@@ -60,7 +60,7 @@ const ProductDetails = React.memo(({ route }) => {
   const [loading, setLoading] = React.useState<boolean>(true);
   const [sizeSelected, setSizeSelected] = React.useState<string>('m');
   const [colorSelected, setColorSelected] = React.useState<string>('#B5E4CA');
-  const [isFavourite, setIsFavourite] = React.useState<boolean>(item?.is_favourite);
+  const [isFavourite, setIsFavourite] = React.useState<boolean>(item?.is_wishlist);
   const [added, setAdded] = React.useState<boolean>(false);
   const [selectedVariant, setSelectedVariant] = useState(0)
 

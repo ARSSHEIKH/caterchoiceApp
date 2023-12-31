@@ -64,7 +64,8 @@ const CheckOut = React.memo(() => {
   const { t } = useTranslation(['common']);
   const { address } = useAppSelector(addressSelector);
   const { navigate, dispatch: nDispatch } = useNavigation<NavigationProp<RootStackParamList>>();
-
+  const now = new Date();
+  const tomorrow = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
   const dispatch = useAppDispatch();
 
   const { cart, extra, slots, error, loader } = useAppSelector(orderSelector);
@@ -72,7 +73,14 @@ const CheckOut = React.memo(() => {
   const [method, setMethod] = React.useState<MethodFragment>(data_method[0]);
   const [visible, setVisible] = React.useState<boolean>(false);
 
+  const currentDate = new Date();
+  const maxDate = new Date();
+  maxDate.setMonth(currentDate.getMonth() + 3);
 
+
+  if(currentDate.getMonth()>8){
+    maxDate.setFullYear(currentDate.getFullYear()+1)
+  }
 
   const renderCardItem = React.useCallback(({ item }: { item: CardFragment }) => {
     return <CardItem item={item} style={styles.card} />;
@@ -92,7 +100,7 @@ const CheckOut = React.memo(() => {
   React.useEffect(() => {
     if (!("pickup_date" in extra)) {
       const currentDate = (new Date()).toISOString();
-      addForm("pickup_date",currentDate);
+      addForm("pickup_date", currentDate);
       availableSlots(currentDate)
     }
   }, []);
@@ -172,12 +180,15 @@ const CheckOut = React.memo(() => {
     ).toFixed(2);
   }
 
+  console.log("extra", extra?.pickup_date ? typeof (extra?.pickup_date) == "object" ? extra?.pickup_date : new Date(extra?.pickup_date) : new Date());
+
+
   return (
     <Container>
       <TopNavigation
         title={t('common:check_out').toString()}
         accessoryLeft={<NavigationAction />}
-        // accessoryRight={<NavigationAction icon="option" />}
+      // accessoryRight={<NavigationAction icon="option" />}
       />
       <Content contentContainerStyle={{ paddingBottom: bottomButton }}>
         <KeyboardAvoidingView
@@ -398,16 +409,16 @@ const CheckOut = React.memo(() => {
         onBackdropPress={() => setVisible(false)}>
         <Calendar
           style={{ backgroundColor: "#fff", borderRadius: 0 }}
+          max={maxDate}
+
           onSelect={nextDate => {
-            console.log("nextDate", nextDate);
-            
+
             addForm("pickup_date", (nextDate))
             setVisible(false);
             availableSlots(nextDate);
 
-          }
-          }
-          date={extra?.pickup_date ? typeof (extra?.pickup_date) == "object" ? extra?.pickup_date : new Date(extra?.pickup_date) : new Date()}
+          }}
+        // date={extra?.pickup_date ? typeof (extra?.pickup_date) == "object" ? extra?.pickup_date : new Date(extra?.pickup_date) : new Date()}
         />
       </Modal>
     </Container>

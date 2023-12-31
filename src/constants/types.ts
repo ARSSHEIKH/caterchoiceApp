@@ -60,6 +60,7 @@ export interface ProductFragment {
   tags?: string[];
   is_sale?: boolean;
   price_sale?: number;
+  is_wishlist:boolean;
   is_favourite:boolean;
 }
 

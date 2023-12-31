@@ -17,7 +17,7 @@ interface ProductItemProps {
 }
 
 const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
-  const { image, name, tags, price, price_sale, is_sale, is_favourite, p_price } = item;
+  const { image, name, tags, price, price_sale, is_sale, is_wishlist, p_price } = item;
   const images = image?.split(',');
 
   const theme = useTheme();
@@ -80,7 +80,7 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
           <Icon
             name="heart"
             pack="assets"
-            style={[styles.icon, { tintColor: is_favourite ? "#ce1212" : theme['background-basic-color-6'] }]}
+            style={[styles.icon, { tintColor: is_wishlist ? "#ce1212" : theme['background-basic-color-6'] }]}
           />
         </TouchableOpacity>
       </View>
