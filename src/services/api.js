@@ -53,6 +53,34 @@
     }
   };
 
+  static wishlist = async (token) => {
+    try {
+      const response = await this._api.get("/wishlist", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+
+  static setWishItem = async (token, slug) => {
+    try {
+      const response = await  this._api.get("/add-wishlist/" + slug, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      console.log("response", response);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
   static product = async (page, query) => {
     let params = { page: page };
     if (query && Object.keys(query).length > 0) {
