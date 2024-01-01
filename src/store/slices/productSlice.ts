@@ -14,6 +14,8 @@ export interface IProductItemState {
   price: number;
   qty: number;
   image: string;
+  is_wishlist: boolean|0|1;
+  slug:string
 }
 
 export interface IProductState {
@@ -66,11 +68,13 @@ export const productSlice = createSlice({
       state.loader = payload;
     },
     setFavourite: (state: IProductState, { payload }: PayloadAction<any>) => {
-      const todo = state.data.find((item) => item.id === payload.id);
+      const todo = state.data.find((item) => item.slug === payload);
+      console.log('====================================');
+      console.log("todo", todo);
+      console.log('====================================');
       if (todo) {
         todo.is_wishlist = !todo.is_wishlist;
       }
-
     },
   },
 });
@@ -120,7 +124,7 @@ export const fetchPromotions = (page: number) => async (dispatch: any) => {
   return json;
 };
 
-export const { setProduct, setMoreProduct, setLoader, setError, setFeatured, setFavourite, set } = productSlice.actions;
+export const { setProduct, setMoreProduct, setLoader, setError, setFeatured, setFavourite, } = productSlice.actions;
 
 export const productSelector = (state: RootState) => state.product;
 

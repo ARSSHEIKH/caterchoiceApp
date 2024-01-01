@@ -39,6 +39,7 @@ import { RootStackParamList } from 'navigation/types';
 import {userSelector} from "../../../store/slices/userSlice";
 import {fetchProduct, productSelector} from "../../../store/slices/productSlice";
 import { useAppDispatch, useAppSelector } from 'store/store';
+import { fetchWishlist } from 'store/slices/wishlistSlice';
 
 
 const ProfileScreen = React.memo(() => {
@@ -64,18 +65,14 @@ const ProfileScreen = React.memo(() => {
   React.useEffect(() => {
     scrollRef.current?.scrollTo({ x: width * selectedIndex });
     const product = async () => {
-      dispatch(fetchProduct(1,{
-        wishlist:true
-      }));
+      dispatch(fetchWishlist(user?.access_token));
     }
     product();
   }, [selectedIndex]);
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(fetchProduct(1,{
-        wishlist:true
-      }));
+      dispatch(fetchWishlist(user?.access_token));
     }, [])
   );
 

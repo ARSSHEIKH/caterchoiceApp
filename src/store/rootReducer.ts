@@ -8,6 +8,7 @@ import category from './slices/categorySlice';
 import product from './slices/productSlice';
 import banner from './slices/bannerSlice';
 import order from './slices/orderSlice';
+import wishlist from "./slices/wishlistSlice"
 
 export type RootState = ReturnType<typeof rootReducer>;
 
@@ -19,7 +20,7 @@ const rootReducer = combineReducers({
   category,
   product,
   banner,
-  order
+  order,wishlist
 });
 
 export default rootReducer;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, ViewStyle, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme, Icon, Layout } from '@ui-kitten/components';
 import FastImage from 'react-native-fast-image';
@@ -12,37 +12,37 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'store/store';
 import { userSelector } from 'store/slices/userSlice';
 import { fetchWishlist, setWishItems } from 'store/slices/wishlistSlice';
-import { setFavourite } from 'store/slices/productSlice';
+import { fetchFeatured, setFavourite } from 'store/slices/productSlice';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 interface ProductItemProps {
   style?: ViewStyle;
   item: ProductFragment;
   onPress?(): void;
-  route: Route
 }
 
-const ProductItem = ({ item, style, onPress, route }: ProductItemProps) => {
+const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
   const { image, name, tags, price, slug, is_sale, is_wishlist, p_price } = item;
   const images = image?.split(',');
 
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const { name: routeName } = useRoute()
   const dispatch = useDispatch()
   const { user } = useAppSelector(userSelector);
+
   const handleFavourite = async () => {
     const response = await dispatch(setWishItems(user?.access_token, slug))
     await dispatch(fetchWishlist(user?.access_token));
-    if(route?.name?.includes("Home")){
-      // dispatch(fetchArticles(user?.access_token))
-      // dispatch(fetchBestSeller(user?.access_token))
-    } else  dispatch(setFavourite(slug))
-    
-   
+    if (routeName?.includes("Home")) {
+      const json = await dispatch(fetchFeatured(1, "drinks", { category_id: 1 }));
+      dispatch(fetchFeatured(1, "bakery", { category_id: 4 }))
+    }
+    else dispatch(setFavourite(slug))
   }
-  console.log("is_wishlist", is_wishlist);
-  
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -71,15 +71,15 @@ const ProductItem = ({ item, style, onPress, route }: ProductItemProps) => {
         {name}
       </Text>
       <View style={styles.priceView}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems:"center", width:"100%" }} >
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} >
           <Text category="b2">Single</Text>
           <Text category="b2" marginLeft={4} marginTop={0}>
             {currency}{price}
           </Text>
         </View>
       </View>
-      <View style={[styles.priceView, {marginTop:5}]}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems:"center", width:"100%" }} >
+      <View style={[styles.priceView, { marginTop: 5 }]}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} >
 
           <Text category="b2">Pack</Text>
           <Text category="b2" marginLeft={4} marginTop={0}>
@@ -97,7 +97,7 @@ const ProductItem = ({ item, style, onPress, route }: ProductItemProps) => {
           </View>
         )}
         <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
-           <Icon
+          <Icon
             name="heart"
             pack="assets"
             style={[styles.icon, { tintColor: (is_wishlist || is_wishlist == 1) ? "#ce1212" : theme['background-basic-color-6'] }]}

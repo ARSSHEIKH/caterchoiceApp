@@ -9,7 +9,7 @@ import CategoriesMainNavigator from './CategoriesMainNavigator';
 import CollectionMainNavigator from './CollectionMainNavigator';
 import ProfileMainNavigator from './ProfileMainNavigator';
 import CartNavigator from './CartNavigator';
-import {orderSelector} from "../store/slices/orderSlice";
+import { orderSelector } from "../store/slices/orderSlice";
 
 import { useAppSelector } from 'store/store';
 import { MainStackParamList } from './types';
@@ -20,12 +20,12 @@ const BottomTab = createBottomTabNavigator<MainStackParamList>();
 const MainBottomTab = memo(() => {
   const theme = useTheme();
   const { bottom } = useLayout();
-  const {cart} = useAppSelector(orderSelector);
+  const { cart } = useAppSelector(orderSelector);
 
-  const total =  cart.reduce(
+  const total = cart.reduce(
     (total, item) => total + (item.quantity || 0),
     0
-);
+  );
 
   const HEIGHT_BOTTOM_TAB = bottom + 49;
 
@@ -73,7 +73,7 @@ const MainBottomTab = memo(() => {
               } else if (index === 1) {
                 isFocused ? (icon = 'collection-fill') : (icon = 'collection');
               } else if (index === 2) {
-                
+
                 isFocused ? (icon = 'cart') : (icon = 'cart');
               } else if (index === 3) {
                 isFocused ? (icon = 'user-fill') : (icon = 'user');
@@ -99,10 +99,10 @@ const MainBottomTab = memo(() => {
                   // },
                 ]}>
                 <Icon pack="assets" name={getIcon()} style={[styles.icon, { tintColor: fill }]} />
-                {index==2 && total >0 &&
-                <View style={styles.badge} ><Text style={styles.badgeText}>{total}</Text></View>
+                {index == 2 && total > 0 &&
+                  <View style={styles.badge} ><Text style={styles.badgeText}>{total}</Text></View>
                 }
-                
+
               </TouchableOpacity>
             );
           })}
@@ -177,19 +177,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 58,
   },
-  badge:{
-    justifyContent:"center",
-    alignItems:"center",
-    position:"absolute",
-    top:6,
-    right:30,
-    width:20,
-    height:20,
-    backgroundColor:"red",
-    borderRadius:10
+  badge: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: 6,
+    right: 30,
+    width: 20,
+    height: 20,
+    backgroundColor: "red",
+    borderRadius: 10
   },
-  badgeText:{
-    color:"#fff",
-    fontSize:12
+  badgeText: {
+    color: "#fff",
+    fontSize: 12
   }
 });

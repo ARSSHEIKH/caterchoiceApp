@@ -8,6 +8,13 @@ import FastImage from 'react-native-fast-image';
 import SvgSale from 'assets/svgs/SvgSale';
 import { ProductFragment } from 'constants/types';
 import { cdn, currency } from "constants/common";
+import { fetchWishlist, setWishItems } from 'store/slices/wishlistSlice';
+import { fetchFeatured, setFavourite } from 'store/slices/productSlice';
+import { useRoute, useTheme } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from 'store/store';
+import { userSelector } from 'store/slices/userSlice';
+import { Icon } from '@ui-kitten/components';
 
 
 interface ProductHorizontalProps {
@@ -18,8 +25,25 @@ interface ProductHorizontalProps {
 }
 
 const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProps) => {
-  const { image, name, tags, price, price_sale, is_sale, p_price, is_wishlist } = item;
+  const { image, name, tags, price, price_sale, is_sale, p_price, is_wishlist, slug } = item;
   const images = image?.split(',');
+
+  const { name: routeName } = useRoute()
+  const dispatch = useDispatch()
+  const { user } = useAppSelector(userSelector);
+  const theme = useTheme();
+
+  const handleFavourite = async () => {
+    const response = await dispatch(setWishItems(user?.access_token, slug))
+    await dispatch(fetchWishlist(user?.access_token));
+    if (routeName?.includes("Home")) {
+      const json = await dispatch(fetchFeatured(1, "drinks", { category_id: 1 }));
+      dispatch(fetchFeatured(1, "bakery", { category_id: 4 }))
+    }
+    else dispatch(setFavourite(slug))
+  }
+
+
 
   return (
     <TouchableOpacity activeOpacity={0.7} style={[styles.container, style]} onPress={onPress}>
@@ -85,6 +109,13 @@ const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProp
           <SvgSale />
         </View>
       )}
+      <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
+        <Icon
+          name="heart"
+          pack="assets"
+          style={[styles.icon, { tintColor: (is_wishlist || is_wishlist == 1) ? "#ce1212" : theme['background-basic-color-6'] }]}
+        />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 };
@@ -182,8 +213,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF50',
   },
   icon: {
-    width: 12,
-    height: 12,
+    width: 16,
+    height: 16,
   },
   saleTag: {
     position: 'absolute',

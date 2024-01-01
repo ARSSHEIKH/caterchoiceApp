@@ -74,7 +74,6 @@
           "Authorization": `Bearer ${token}`
         }
       })
-      console.log("response", response);
       return response;
     } catch (error) {
       return error.response;
@@ -104,7 +103,7 @@
 
     try {
       const response = await axios.get("https://cater-choice.com/api"+"/product/product-promotions", {params:params, headers:{
-        "Authorization":"Bearer 60|y02g3zujf5iipKOhGcc7gVzVm5eNlOUpp3AbB4E8"
+        "Authorization": `Bearer ${token}`
       }});
       return response;
     } catch (error) {

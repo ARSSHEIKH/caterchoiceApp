@@ -52,8 +52,8 @@ export const fetchWishlist = (token:string,page:number, params:object) => async 
 
     let products = []
     json.data?.wishlist?.map((p)=>{
-      products.push(p?.product)
-    })
+      products.push(p)
+    });
     if(page>1){
       dispatch(setWishlist(products));
     } else {
@@ -69,7 +69,6 @@ export const fetchWishlist = (token:string,page:number, params:object) => async 
 
 export const setWishItems = (token:string, slug:string) => async (dispatch:any) => {
   const json = await Api.setWishItem(token, slug);
-  console.log("json", json);
   
   if(json.status==200){
     return json?.data

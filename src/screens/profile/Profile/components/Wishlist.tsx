@@ -9,8 +9,9 @@ import { products_list } from 'constants/data';
 import { ProductFragment } from 'constants/types';
 import { RootStackParamList } from 'navigation/types';
 
-import {fetchProduct, productSelector} from "../../../../store/slices/productSlice";
+import { fetchProduct, productSelector } from "../../../../store/slices/productSlice";
 import { useAppDispatch, useAppSelector } from 'store/store';
+import { wishlistSelector } from 'store/slices/wishlistSlice';
 
 let onEndReachedCalledDuringMomentum = true;
 let page = 1;
@@ -22,17 +23,17 @@ const Wishlist: React.FC = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const {data} = useAppSelector(productSelector);
+  const { wishlist: data } = useAppSelector(wishlistSelector);
 
-  const onEndReached = React.useCallback(async()=>{
+  const onEndReached = React.useCallback(async () => {
 
-    if(!onEndReachedCalledDuringMomentum){
+    if (!onEndReachedCalledDuringMomentum) {
       page++;
-      const json = await dispatch(fetchProduct(page,{
-        wishlist:true
+      const json = await dispatch(fetchProduct(page, {
+        wishlist: true
       }));
       onEndReachedCalledDuringMomentum = true;
-  }
+    }
   }, []);
 
   const renderItem = React.useCallback(
@@ -54,7 +55,7 @@ const Wishlist: React.FC = () => {
             marginRight: index % 2 !== 0 ? 16 : 8,
             marginBottom: 16,
           }}
-          item={item}
+          item={item?.product}
           onPress={() => navigate('Product', { screen: 'ProductDetails' })}
         />
       );
@@ -75,16 +76,16 @@ const Wishlist: React.FC = () => {
         scrollEnabled={false}
       /> */}
       <FlatList
-          data={data || []}
-          numColumns={2}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => `${item.id}`}
-          onEndReached={onEndReached}
-          onEndReachedThreshold={0.5}
-          onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
+        data={data || []}
+        numColumns={2}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => `${item.id}`}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
+        onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
 
-        />
+      />
     </View>
   );
 };
