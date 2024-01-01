@@ -51,10 +51,10 @@ const RecentView: React.FC = () => {
   }, [user])
 
   React.useEffect(() => {
-console.log('====================================');
-console.log("user?.recently_viewed ", user?.recently_viewed );
-console.log('====================================');
-    // setRecentlyViewed(user?.recently_viewed ? JSON.parse(user?.recently_viewed) : [])
+    console.log('====================================');
+    console.log("user?.recently_viewed ", typeof (user?.recently_viewed));
+    console.log('====================================');
+    setRecentlyViewed(user?.recently_viewed ? typeof (user?.recently_viewed) == "string" ? JSON.parse(user?.recently_viewed) : user?.recently_viewed : [])
     // console.log("recently_viewed", data)
     // let items = findCommonItems(data, user?.recently_viewed);
 
