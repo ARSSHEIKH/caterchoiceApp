@@ -8,21 +8,41 @@ import Skeleton from './Skeleton';
 
 import { ProductFragment } from 'constants/types';
 import { cdn, currency } from "constants/common";
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from 'store/store';
+import { userSelector } from 'store/slices/userSlice';
+import { fetchWishlist, setWishItems } from 'store/slices/wishlistSlice';
+import { setFavourite } from 'store/slices/productSlice';
 
 
 interface ProductItemProps {
   style?: ViewStyle;
   item: ProductFragment;
   onPress?(): void;
+  route: Route
 }
 
-const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
-  const { image, name, tags, price, price_sale, is_sale, is_wishlist, p_price } = item;
+const ProductItem = ({ item, style, onPress, route }: ProductItemProps) => {
+  const { image, name, tags, price, slug, is_sale, is_wishlist, p_price } = item;
   const images = image?.split(',');
 
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const dispatch = useDispatch()
+  const { user } = useAppSelector(userSelector);
+  const handleFavourite = async () => {
+    const response = await dispatch(setWishItems(user?.access_token, slug))
+    await dispatch(fetchWishlist(user?.access_token));
+    if(route?.name?.includes("Home")){
+      // dispatch(fetchArticles(user?.access_token))
+      // dispatch(fetchBestSeller(user?.access_token))
+    } else  dispatch(setFavourite(slug))
+    
+   
+  }
+  console.log("is_wishlist", is_wishlist);
+  
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -76,11 +96,11 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
             </Text>
           </View>
         )}
-        <TouchableOpacity activeOpacity={0.7} style={styles.favorite}>
-          <Icon
+        <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
+           <Icon
             name="heart"
             pack="assets"
-            style={[styles.icon, { tintColor: is_wishlist ? "#ce1212" : theme['background-basic-color-6'] }]}
+            style={[styles.icon, { tintColor: (is_wishlist || is_wishlist == 1) ? "#ce1212" : theme['background-basic-color-6'] }]}
           />
         </TouchableOpacity>
       </View>
@@ -180,7 +200,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF50',
   },
   icon: {
-    width: 12,
-    height: 12,
+    width: 16,
+    height: 16,
   },
 });

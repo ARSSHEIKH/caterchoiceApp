@@ -60,8 +60,9 @@ export interface ProductFragment {
   tags?: string[];
   is_sale?: boolean;
   price_sale?: number;
-  is_wishlist:boolean;
+  is_wishlist:boolean|0|1;
   is_favourite:boolean;
+  slug: string;
 }
 
 export interface ICollection {
