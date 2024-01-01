@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import Text from './Text';
 import ProductHorizontal from './ProductHorizontal';
 import { OrderFragment } from 'constants/types';
+import { openLink } from 'utils/openLink';
+import { paymentUrl } from 'constants/common';
 
 interface OrderItemProps {
   style?: ViewStyle;
@@ -22,36 +24,40 @@ interface OrderItemProps {
 const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { reference_no, sale_status, items } = item;
+  const { reference_no, payment_status, items, id } = item;
+
   return (
     <View
       style={[styles.container, { borderBottomColor: theme['background-basic-color-4'] }, style]}>
       <View style={styles.row}>
-        <Text category="t1" status="content">
+        <Text category="t2" status="content" maxWidth={"80%"}>
           {t('order')} #{reference_no}
         </Text>
-        <Text category="c2">{sale_status}</Text>
+        <Text category="c2">{payment_status}</Text>
+        {
+          payment_status && payment_status?.toLowerCase().includes("pending") && <Text style={{ paddingVertical: 10 }} onPress={() => openLink(`${paymentUrl}/${id}`)} category="b4" underline >Pay Now</Text>
+        }
       </View>
       {(items || []).map((i, idx) => {
         return <ProductHorizontal key={idx} item={(i?.product || {})} type={i?.type} />;
       })}
       <View style={styles.row1}>
         {buttonLeft &&
-        <Button
-          children={buttonLeft?.title}
-          onPress={buttonLeft?.onPress}
-          status="basic"
-          style={styles.buttonLeft}
-          size="medium"
-        />
+          <Button
+            children={buttonLeft?.title}
+            onPress={buttonLeft?.onPress}
+            status="basic"
+            style={styles.buttonLeft}
+            size="medium"
+          />
         }
         {buttonRight &&
-        <Button
-          children={buttonRight?.title}
-          onPress={buttonRight?.onPress}
-          style={styles.buttonRight}
-          size="medium"
-        />
+          <Button
+            children={buttonRight?.title}
+            onPress={buttonRight?.onPress}
+            style={styles.buttonRight}
+            size="medium"
+          />
         }
       </View>
     </View>

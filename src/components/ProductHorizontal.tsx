@@ -43,8 +43,6 @@ const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProp
     else dispatch(setFavourite(slug))
   }
 
-
-
   return (
     <TouchableOpacity activeOpacity={0.7} style={[styles.container, style]} onPress={onPress}>
       <View style={[styles.imageView, { height: 100 }]}>
@@ -109,13 +107,13 @@ const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProp
           <SvgSale />
         </View>
       )}
-      <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
+      {routeName!="MyOrder" && <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
         <Icon
           name="heart"
           pack="assets"
           style={[styles.icon, { tintColor: (is_wishlist || is_wishlist == 1) ? "#ce1212" : theme['background-basic-color-6'] }]}
         />
-      </TouchableOpacity>
+      </TouchableOpacity>}
     </TouchableOpacity>
   );
 };
