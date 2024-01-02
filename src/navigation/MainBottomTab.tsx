@@ -128,7 +128,7 @@ const MainBottomTab = memo(() => {
   return (
     <BottomTab.Navigator
       initialRouteName="HomeMain"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: false, tabBarHideOnKeyboard:true }}
       tabBar={(props) => <MyTabBar {...props} />}>
       <BottomTab.Screen name="HomeMain" component={HomeMainNavigator} />
       <BottomTab.Screen name="CollectionMain" component={CollectionMainNavigator} />

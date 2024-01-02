@@ -48,7 +48,6 @@ const ProductGridScreen = React.memo(({ route }) => {
     return route?.params?.isPromotion ? await dispatch(fetchPromotions(page)) : await dispatch(fetchProduct(page, params))
   }
 
-
   React.useEffect(() => {
     onEndReachedCalledDuringMomentum = true;
     page = 1;
@@ -60,16 +59,16 @@ const ProductGridScreen = React.memo(({ route }) => {
     product();
   }, []);
 
-  const applyFilter = (s) => {
+  const applyFilter = (s:string) => {
     page = 1;
     clearTimeout(timer);
     timer = setTimeout(async () => {
-      setLoading(true);
+      // setLoading(true);
       const json = await dispatch(fetchProducts(page, {
         category_id: id,
         search: s
-      }));
-      setLoading(false);
+      }, true));
+      // setLoading(false);
     }, 100);
   }
 

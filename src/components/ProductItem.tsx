@@ -14,6 +14,7 @@ import { userSelector } from 'store/slices/userSlice';
 import { fetchWishlist, setWishItems } from 'store/slices/wishlistSlice';
 import { fetchFeatured, setFavourite } from 'store/slices/productSlice';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { datesDifference } from 'utils/datesDifference';
 
 
 interface ProductItemProps {
@@ -32,6 +33,8 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
   const { name: routeName } = useRoute()
   const dispatch = useDispatch()
   const { user } = useAppSelector(userSelector);
+  const promotionExist = datesDifference(item?.StartingDate)
+  const endDate = new Date(item?.EndingDate).toLocaleDateString()
 
   const handleFavourite = async () => {
     const response = await dispatch(setWishItems(user?.access_token, slug))
@@ -43,68 +46,75 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
     else dispatch(setFavourite(slug))
   }
 
+
+
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      style={[
-        styles.container,
-        {
-          borderColor: theme['background-basic-color-10'],
-          backgroundColor: theme['background-basic-color-1'],
-        },
-        style,
-      ]}
-      onPress={onPress}>
-      <Layout level="8" style={styles.imageView}>
-        {!!images && <FastImage resizeMode="cover" style={styles.image} source={{ uri: images[0] }} />}
-      </Layout>
-      <View style={styles.tagView}>
-        {tags?.map((i, idx) => {
-          return (
-            <Text category="c4" status="body" marginRight={4} key={idx}>
-              #{i}
-            </Text>
-          );
-        })}
-      </View>
-      <Text category="b3" marginTop={4} marginHorizontal={16} numberOfLines={2}>
-        {name}
-      </Text>
-      <View style={styles.priceView}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} >
-          <Text category="b2">Single</Text>
-          <Text category="b2" marginLeft={4} marginTop={0}>
-            {currency}{price}
-          </Text>
-        </View>
-      </View>
-      <View style={[styles.priceView, { marginTop: 5 }]}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} >
+    <View style={[styles.container, style,
+    {
+      borderColor: theme['background-basic-color-10'],
+      backgroundColor: theme['background-basic-color-1'],
+    }, !promotionExist && { borderTopLeftRadius: 20, borderTopRightRadius: 20, }]}>
 
-          <Text category="b2">Pack</Text>
-          <Text category="b2" marginLeft={4} marginTop={0}>
-            {currency}{p_price}
-          </Text>
-        </View>
+      {!promotionExist && <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "red", borderTopLeftRadius: 5, borderTopRightRadius: 5, paddingHorizontal: 5 }}>
+        <Text style={{ color: "#fff", fontSize: 10, fontWeight: '700' }} >Promotion</Text>
+        <Text style={{ color: "#fff", fontSize: 10, fontWeight: '700' }} >End {endDate} </Text>
+      </View>}
 
-      </View>
-      <View style={styles.top}>
-        {is_sale && (
-          <View style={[styles.sale, { backgroundColor: theme['color-secondary-07'] }]}>
-            <Text category="c4" status="white">
-              {t('sale')}
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={onPress}>
+
+        <Layout level="8" style={styles.imageView}>
+          {!!images && <FastImage resizeMode="cover" style={styles.image} source={{ uri: images[0] }} />}
+        </Layout>
+        <View style={styles.tagView}>
+          {tags?.map((i, idx) => {
+            return (
+              <Text category="c4" status="body" marginRight={4} key={idx}>
+                #{i}
+              </Text>
+            );
+          })}
+        </View>
+        <Text category="b3" marginTop={4} marginHorizontal={16} numberOfLines={2}>
+          {name}
+        </Text>
+        <View style={styles.priceView}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} >
+            <Text category="b2">Single</Text>
+            <Text category="b2" marginLeft={4} marginTop={0}>
+              {currency}{price}
             </Text>
           </View>
-        )}
-        <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
-          <Icon
-            name="heart"
-            pack="assets"
-            style={[styles.icon, { tintColor: (is_wishlist || is_wishlist == 1) ? "#ce1212" : theme['background-basic-color-6'] }]}
-          />
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+        </View>
+        <View style={[styles.priceView, { marginTop: 5 }]}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }} >
+
+            <Text category="b2">Pack</Text>
+            <Text category="b2" marginLeft={4} marginTop={0}>
+              {currency}{p_price}
+            </Text>
+          </View>
+
+        </View>
+        <View style={styles.top}>
+          {is_sale && (
+            <View style={[styles.sale, { backgroundColor: theme['color-secondary-07'] }]}>
+              <Text category="c4" status="white">
+                {t('sale')}
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
+            <Icon
+              name="heart"
+              pack="assets"
+              style={[styles.icon, { tintColor: (is_wishlist || is_wishlist == 1) ? "#ce1212" : theme['background-basic-color-6'] }]}
+            />
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 

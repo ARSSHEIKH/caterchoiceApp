@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'store/store';
 import { userSelector } from 'store/slices/userSlice';
 import { Icon } from '@ui-kitten/components';
+import { datesDifference } from 'utils/datesDifference';
 
 
 interface ProductHorizontalProps {
@@ -33,6 +34,9 @@ const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProp
   const { user } = useAppSelector(userSelector);
   const theme = useTheme();
 
+  const promotionExist = datesDifference(item?.StartingDate)
+  const endDate = new Date(item?.EndingDate).toLocaleDateString();
+
   const handleFavourite = async () => {
     const response = await dispatch(setWishItems(user?.access_token, slug))
     await dispatch(fetchWishlist(user?.access_token));
@@ -44,77 +48,86 @@ const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProp
   }
 
   return (
-    <TouchableOpacity activeOpacity={0.7} style={[styles.container, style]} onPress={onPress}>
-      <View style={[styles.imageView, { height: 100 }]}>
-        {!!images && <FastImage resizeMode="cover" style={styles.image} source={{ uri: images[0] }} />}
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={styles.tagView}>
-          {tags?.map((i, idx) => {
-            return (
-              <Text category="c3" status="body" marginRight={4} key={idx}>
-                #{i}
-              </Text>
-            );
-          })}
+    <View style={[style,
+      !promotionExist && { borderTopLeftRadius: 20, borderTopRightRadius: 20, },
+    ]}>
+      {!promotionExist && <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "red", borderTopLeftRadius: 5, borderTopRightRadius: 5, paddingHorizontal: 5 }}>
+        <Text style={{ color: "#fff", fontSize: 10, fontWeight: '700' }} >Promotion</Text>
+        <Text style={{ color: "#fff", fontSize: 10, fontWeight: '700' }} >End {endDate} </Text>
+      </View>}
+
+      <TouchableOpacity activeOpacity={0.7} style={[styles.container, style]} onPress={onPress}>
+        <View style={[styles.imageView, { height: 100 }]}>
+          {!!images && <FastImage resizeMode="cover" style={styles.image} source={{ uri: images[0] }} />}
         </View>
-        <Text category="b3" marginTop={4} numberOfLines={2}>
-          {name}
-        </Text>
-        {/* <Text category="b2">{currency}{price_sale}</Text> */}
-        {type ?
-          (
-            <View style={styles.priceViewContainer}>
-              <View style={styles.priceView}>
-                <Text category="b3" status="placeholder" marginLeft={4} marginTop={3}>
-                {type == 'SINGLE' ? 'Single' : 'Pack'}
+        <View style={{ flex: 1 }}>
+          <View style={styles.tagView}>
+            {tags?.map((i, idx) => {
+              return (
+                <Text category="c3" status="body" marginRight={4} key={idx}>
+                  #{i}
                 </Text>
-                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-                  {currency}{type == 'SINGLE' ? price : p_price}
-                </Text>
-              </View>
-              {/* <View style={{width: '70%', alignItems: 'flex-end'}}>
+              );
+            })}....................
+          </View>
+          <Text category="b3" marginTop={4} numberOfLines={2}>
+            {name}
+          </Text>
+          {/* <Text category="b2">{currency}{price_sale}</Text> */}
+          {type ?
+            (
+              <View style={styles.priceViewContainer}>
+                <View style={styles.priceView}>
+                  <Text category="b3" status="placeholder" marginLeft={4} marginTop={3}>
+                    {type == 'SINGLE' ? 'Single' : 'Pack'}
+                  </Text>
+                  <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                    {currency}{type == 'SINGLE' ? price : p_price}
+                  </Text>
+                </View>
+                {/* <View style={{width: '70%', alignItems: 'flex-end'}}>
                 <Text category="t1" status="placeholder" marginLeft={4} marginTop={3}>
                   {type == 'SINGLE' ? 'Single' : 'Pack'}
                 </Text>
               </View> */}
-            </View>
-          ) :
-          (
-            <View style={styles.priceViewContainer}>
-              <View style={styles.priceView}>
-                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-                  Single
-                </Text>
-                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-                  {currency}{price}
-                </Text>
               </View>
-              <View style={styles.priceView}>
-                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-                  Pack
-                </Text>
-                <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
-                  {currency}{p_price}
-                </Text>
+            ) :
+            (
+              <View style={styles.priceViewContainer}>
+                <View style={styles.priceView}>
+                  <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                    Single
+                  </Text>
+                  <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                    {currency}{price}
+                  </Text>
+                </View>
+                <View style={styles.priceView}>
+                  <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                    Pack
+                  </Text>
+                  <Text category="b2" status="placeholder" marginLeft={4} marginTop={3}>
+                    {currency}{p_price}
+                  </Text>
+                </View>
               </View>
-            </View>
-          )
-        }
-      </View>
-      {is_sale && (
-        <View style={styles.saleTag}>
-          <SvgSale />
+            )
+          }
         </View>
-      )}
-      {routeName!="MyOrder" && <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
-        <Icon
-          name="heart"
-          pack="assets"
-          style={[styles.icon, { tintColor: (is_wishlist || is_wishlist == 1) ? "#ce1212" : theme['background-basic-color-6'] }]}
-        />
-      </TouchableOpacity>}
-    </TouchableOpacity>
+        {is_sale && (
+          <View style={styles.saleTag}>
+            <SvgSale />
+          </View>
+        )}
+        {routeName != "MyOrder" && <TouchableOpacity onPress={handleFavourite} activeOpacity={0.7} style={styles.favorite}>
+          <Icon
+            name="heart"
+            pack="assets"
+            style={[styles.icon, { tintColor: (is_wishlist || is_wishlist == 1) ? "#ce1212" : theme['background-basic-color-6'] }]}
+          />
+        </TouchableOpacity>}
+      </TouchableOpacity>
+    </View>
   );
 };
 

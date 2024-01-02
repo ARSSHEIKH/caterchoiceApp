@@ -14,8 +14,8 @@ export interface IProductItemState {
   price: number;
   qty: number;
   image: string;
-  is_wishlist: boolean|0|1;
-  slug:string
+  is_wishlist: boolean | 0 | 1;
+  slug: string
 }
 
 export interface IProductState {
@@ -43,7 +43,7 @@ export const productSlice = createSlice({
   initialState,
   reducers: {
     setProduct: (state: IProductState, { payload }: PayloadAction<any>) => {
-      state.data = payload?.data??payload;
+      state.data = payload?.data ?? payload;
       state.total = payload?.total;
       state.is_more = payload?.is_more;
     },
@@ -79,17 +79,21 @@ export const productSlice = createSlice({
   },
 });
 
-export const fetchProduct = (page: number, params: object) => async (dispatch: any) => {
+export const fetchProduct = (page: number, params: object, search: boolean) => async (dispatch: any) => {
   dispatch(setError({}));
   dispatch(setLoader(true));
   const json = await Api.product(page, params);
   if (json.status == 200) {
-    if (page > 1) {
-      dispatch(setMoreProduct(json.data));
-    } else {
-      dispatch(setProduct(json.data));
+    if (search) {
+      dispatch(setProduct(json.data?.data));
     }
-
+    else {
+      if (page > 1) {
+        dispatch(setMoreProduct(json.data));
+      } else {
+        dispatch(setProduct(json.data));
+      }
+    }
   } else if (json.status == 422) {
     dispatch(setError(json.data));
   }
@@ -118,7 +122,7 @@ export const fetchPromotions = (page: number) => async (dispatch: any) => {
 
   } else if (json.status == 422) {
     dispatch(setError(json.data?.error
-      ));
+    ));
   }
   dispatch(setLoader(false));
   return json;
