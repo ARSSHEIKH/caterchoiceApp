@@ -19,10 +19,21 @@ export const datesDifference = (start_date: string) => {
         if (daysDifference === 0) {
          return true
         } else {
-            return true
+            return false
         }
       } else {
         return false
       }
 
 }
+export  const checkDateRange = (start_date:string, end_date:string) => {
+  const currentDate = new Date();
+  const startDate = new Date(start_date);
+  const endDate = new Date(end_date);
+
+  if (currentDate >= startDate && currentDate <= endDate) {
+    return true
+  } else {
+   return false
+  }
+};

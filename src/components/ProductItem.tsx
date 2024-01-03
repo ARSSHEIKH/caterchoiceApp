@@ -14,7 +14,7 @@ import { userSelector } from 'store/slices/userSlice';
 import { fetchWishlist, setWishItems } from 'store/slices/wishlistSlice';
 import { fetchFeatured, setFavourite } from 'store/slices/productSlice';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { datesDifference } from 'utils/datesDifference';
+import { checkDateRange, datesDifference } from 'utils/datesDifference';
 
 
 interface ProductItemProps {
@@ -33,7 +33,7 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
   const { name: routeName } = useRoute()
   const dispatch = useDispatch()
   const { user } = useAppSelector(userSelector);
-  const promotionExist = datesDifference(item?.StartingDate)
+  const promotionExist = checkDateRange(item?.StartingDate, item?.EndingDate)
   const endDate = new Date(item?.EndingDate).toLocaleDateString()
 
   const handleFavourite = async () => {
@@ -47,15 +47,18 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
   }
 
 
+  console.log('====================================');
+  console.log("promotionExist", promotionExist, name);
+  console.log('====================================');
 
   return (
     <View style={[styles.container, style,
     {
       borderColor: theme['background-basic-color-10'],
       backgroundColor: theme['background-basic-color-1'],
-    }, !promotionExist && { borderTopLeftRadius: 20, borderTopRightRadius: 20, }]}>
+    }, promotionExist && { borderTopLeftRadius: 20, borderTopRightRadius: 20, }]}>
 
-      {!promotionExist && <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "red", borderTopLeftRadius: 5, borderTopRightRadius: 5, paddingHorizontal: 5 }}>
+      {promotionExist && <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "red", borderTopLeftRadius: 5, borderTopRightRadius: 5, paddingHorizontal: 5 }}>
         <Text style={{ color: "#fff", fontSize: 10, fontWeight: '700' }} >Promotion</Text>
         <Text style={{ color: "#fff", fontSize: 10, fontWeight: '700' }} >End {endDate} </Text>
       </View>}
