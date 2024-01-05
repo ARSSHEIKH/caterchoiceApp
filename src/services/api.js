@@ -1,50 +1,51 @@
 /**
  * @format
  */
- import axios from "axios";
- 
- export default class Api {
-   _api = null;
- 
-   static init = ({ url }) => {
-     try {
-       this._api = axios.create({
-         baseURL: url,
-         timeout: 10000,
-       });
-     } catch (error) {
-       return error;
-     }
-   };
- 
-   static setClientToken = async (token) => {
-     this._api.interceptors.request.use(function (config) {
-       config.headers.Authorization = `Bearer ${token}`;
-       return config;
-     });
-   };
- 
-   /*************** Fan API  ******************/
- 
-   static login = async (data) => {
-     try {
-       const response = await this._api.post("/login", data);
-       return response;
-     } catch (error) {
-       return error.response;
-     }
-   };
- 
-   static signup = async (data) => {
-     try {
-       const response = await this._api.post("/signup", data);
-       return response;
-     } catch (error) {
-       return error.response;
-     }
-   };
+import axios from "axios";
+import { uri } from "constants/common";
 
-   static categories = async () => {
+export default class Api {
+  _api = null;
+
+  static init = ({ url }) => {
+    try {
+      this._api = axios.create({
+        baseURL: url,
+        timeout: 10000,
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  static setClientToken = async (token) => {
+    this._api.interceptors.request.use(function (config) {
+      config.headers.Authorization = `Bearer ${token}`;
+      return config;
+    });
+  };
+
+  /*************** Fan API  ******************/
+
+  static login = async (data) => {
+    try {
+      const response = await this._api.post("/login", data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  static signup = async (data) => {
+    try {
+      const response = await this._api.post("/signup", data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  static categories = async () => {
     try {
       const response = await this._api.get("/categories");
       return response;
@@ -69,7 +70,7 @@
 
   static setWishItem = async (token, slug) => {
     try {
-      const response = await  this._api.get("/add-wishlist/" + slug, {
+      const response = await this._api.get("/add-wishlist/" + slug, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -91,7 +92,7 @@
     }
 
     try {
-      const response = await this._api.get("/product", {params:params});
+      const response = await this._api.get("/product", { params: params });
       return response;
     } catch (error) {
       return error.response;
@@ -102,9 +103,11 @@
     let params = { page: page };
 
     try {
-      const response = await axios.get("https://cater-choice.com/api"+"/product/product-promotions", {params:params, headers:{
-        "Authorization": `Bearer ${token}`
-      }});
+      const response = await axios.get(uri + "/product/product-promotions", {
+        params: params, headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       return response;
     } catch (error) {
       return error.response;
@@ -123,7 +126,21 @@
     }
 
     try {
-      const response = await this._api.get("/order", {params:params});
+      const response = await this._api.get("/order", { params: params });
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+
+  static orderStatus = async (order_id) => {
+    try {
+      const response = await axios.get(uri + "/order_status/" + order_id, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       return response;
     } catch (error) {
       return error.response;
@@ -141,7 +158,7 @@
     }
 
     try {
-      const response = await this._api.get("/order/slots", {params:params});
+      const response = await this._api.get("/order/slots", { params: params });
       return response;
     } catch (error) {
       return error.response;
@@ -178,12 +195,11 @@
     }
 
     try {
-      const response = await this._api.get("/warehouses", {params:params});
+      const response = await this._api.get("/warehouses", { params: params });
       return response;
     } catch (error) {
       return error.response;
     }
   };
- 
- }
- 
+
+}

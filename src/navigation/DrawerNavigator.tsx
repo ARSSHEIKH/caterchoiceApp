@@ -22,6 +22,7 @@ import { Images } from 'assets/images';
 import { DrawerStackParamList, RootStackParamList } from './types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { openLink } from 'utils/openLink';
+import OrderCompleted from 'screens/order/OrderCompleted';
 
 const { Navigator, Screen } = createDrawerNavigator<DrawerStackParamList>();
 
@@ -177,11 +178,12 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = () => {
 const DrawerNavigator = memo(() => (
   <Navigator
     initialRouteName="MainBottomTab"
-    screenOptions={{ headerShown: false, drawerStyle: styles.drawerStyle, drawerType:"back" }}
+    screenOptions={{ headerShown: false, drawerStyle: styles.drawerStyle, drawerType: "back" }}
     drawerContent={(props: DrawerContentComponentProps) => <DrawerContent {...props} />}>
     <Screen name="MainBottomTab" component={MainBottomTab} />
     <Screen name="MyCart" component={MyCart} />
     <Screen name="MyOrder" component={MyOrder} />
+    <Screen name="OrderCompleted" component={OrderCompleted} />
     <Screen name="TermOfUse" component={TermOfUseScreen} />
     <Screen name="BlogFashion" component={BlogFashion} />
     <Screen name="MyFeed" component={MyFeed} />

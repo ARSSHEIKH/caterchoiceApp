@@ -49,9 +49,9 @@ const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProp
 
   return (
     <View style={[style,
-      !promotionExist && { borderTopLeftRadius: 20, borderTopRightRadius: 20, },
+      (!promotionExist && routeName!="MyOrder") && { borderTopLeftRadius: 20, borderTopRightRadius: 20, },
     ]}>
-      {!promotionExist && <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "red", borderTopLeftRadius: 5, borderTopRightRadius: 5, paddingHorizontal: 5 }}>
+      {(!promotionExist && routeName!="MyOrder") && <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "red", borderTopLeftRadius: 5, borderTopRightRadius: 5, paddingHorizontal: 5 }}>
         <Text style={{ color: "#fff", fontSize: 10, fontWeight: '700' }} >Promotion</Text>
         <Text style={{ color: "#fff", fontSize: 10, fontWeight: '700' }} >End {endDate} </Text>
       </View>}
@@ -68,7 +68,7 @@ const ProductHorizontal = ({ item, style, onPress, type }: ProductHorizontalProp
                   #{i}
                 </Text>
               );
-            })}....................
+            })}
           </View>
           <Text category="b3" marginTop={4} numberOfLines={2}>
             {name}

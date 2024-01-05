@@ -46,11 +46,6 @@ const ProductItem = ({ item, style, onPress }: ProductItemProps) => {
     else dispatch(setFavourite(slug))
   }
 
-
-  console.log('====================================');
-  console.log("promotionExist", promotionExist, name);
-  console.log('====================================');
-
   return (
     <View style={[styles.container, style,
     {

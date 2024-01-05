@@ -18,6 +18,7 @@ import AddAddress from 'screens/address/AddAddress';
 import MyCard from 'screens/card/MyCard';
 import MyCart from 'screens/order/MyCart';
 import AddCard from 'screens/card/AddCard';
+import OrderCompleted from 'screens/order/OrderCompleted';
 
 const Stack = createStackNavigator<ProductStackParamList>();
 
@@ -33,6 +34,7 @@ const ProductNavigator = React.memo(() => {
       <Stack.Screen name="OrderDetails" component={OrderDetails} />
       <Stack.Screen name="OrderTracking" component={OrderTracking} />
       <Stack.Screen name="CheckOut" component={CheckOut} />
+      <Stack.Screen name="OrderCompleted" component={OrderCompleted} />
       <Stack.Screen name="MyAddress" component={MyAddress} />
       <Stack.Screen name="AddressDetails" component={AddressDetails} />
       <Stack.Screen name="AddAddress" component={AddAddress} />

@@ -30,6 +30,7 @@ import { Linking } from 'react-native'
 import { web } from '../../constants/common';
 import { actualPrice } from 'screens/order/MyCart';
 import { openLink } from 'utils/openLink';
+import Api from 'services/api';
 
 
 
@@ -78,8 +79,8 @@ const CheckOut = React.memo(() => {
   maxDate.setMonth(currentDate.getMonth() + 3);
 
 
-  if(currentDate.getMonth()>8){
-    maxDate.setFullYear(currentDate.getFullYear()+1)
+  if (currentDate.getMonth() > 8) {
+    maxDate.setFullYear(currentDate.getFullYear() + 1)
   }
 
   const renderCardItem = React.useCallback(({ item }: { item: CardFragment }) => {
@@ -123,34 +124,37 @@ const CheckOut = React.memo(() => {
     data['cart'] = cart
     data['extra'] = extra;
     const json = await dispatch(submitOrder(data));
-    if (json.status == 200) {
-      navigate('ModalScreen', {
-        modalScreen: {
-          status: 'success',
-          title: 'Success!',
-          description: 'Thank you for purchasing\nYour order will be shipped in few day',
-          children: [
-            {
-              status: 'primary',
-              title: 'Go Shopping',
-              onPress: () => {
-                nDispatch(
-                  CommonActions.reset({
-                    index: 1,
-                    routes: [
-                      { name: 'Drawer', },
-                    ],
-                  })
-                );
-              },
-              id: 0,
-            },
-          ],
-        },
-      })
-      const url = `${paymentUrl}/${json?.data?.data?.id}`;
-      openLink(url)
-    }
+    const orderId = json?.data?.data?.id
+    navigate('OrderCompleted', {orderId})
+      // const response = await Api.orderStatus(orderId)
+      // if (response.status == 200)
+      //   navigate('ModalScreen', {
+      //     modalScreen: {
+      //       status: 'success',
+      //       title: 'Success!',
+      //       description: 'Thank you for purchasing\nYour order will be shipped in few day',
+      //       children: [
+      //         {
+      //           status: 'primary',
+      //           title: 'Go Shopping',
+      //           onPress: () => {
+      //             nDispatch(
+      //               CommonActions.reset({
+      //                 index: 1,
+      //                 routes: [
+      //                   { name: 'Drawer', },
+      //                 ],
+      //               })
+      //             );
+      //           },
+      //           id: 0,
+      //         },
+      //       ],
+      //     },
+      //   })
+      // const url = `${paymentUrl}/${orderId}`;
+      // openLink(url)
+    
 
   }
 

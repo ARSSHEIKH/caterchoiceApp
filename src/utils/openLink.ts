@@ -34,15 +34,16 @@ export const openLink = async (url: any) => {
                     endEnter: 'slide_in_left',
                     endExit: 'slide_out_right'
                 },
+                
                 headers: {
                     'my-custom-header': 'my custom header value'
                 }
             });
-
             InAppBrowser.close();
-
+            return result
         }
         else Linking.openURL(url)
+      
     } catch (error) {
     }
 }

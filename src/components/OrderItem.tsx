@@ -7,6 +7,7 @@ import ProductHorizontal from './ProductHorizontal';
 import { OrderFragment } from 'constants/types';
 import { openLink } from 'utils/openLink';
 import { paymentUrl } from 'constants/common';
+import { useNavigation } from '@react-navigation/native';
 
 interface OrderItemProps {
   style?: ViewStyle;
@@ -25,6 +26,7 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { reference_no, payment_status, items, id } = item;
+  const { navigate } = useNavigation()
 
   return (
     <View
@@ -35,11 +37,16 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
         </Text>
         <Text category="c2">{payment_status}</Text>
         {
-          payment_status && payment_status?.toLowerCase().includes("pending") && <Text style={{ paddingVertical: 10 }} onPress={() => openLink(`${paymentUrl}/${id}`)} category="b4" underline >Pay Now</Text>
+          payment_status && payment_status?.toLowerCase().includes("pending") &&
+          <Text category="b4" underline style={{ paddingVertical: 10 }}
+            onPress={() => navigate('OrderCompleted', { orderId: id })}
+          >
+            Pay Now
+          </Text>
         }
       </View>
       {(items || []).map((i, idx) => {
-        return <ProductHorizontal key={idx} item={(i?.product || {})} type={i?.type} />;
+        return <ProductHorizontal key={idx} item={(i?.product || {})} type={i?.type} />
       })}
       <View style={styles.row1}>
         {buttonLeft &&
