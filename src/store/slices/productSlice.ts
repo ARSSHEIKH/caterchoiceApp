@@ -26,6 +26,7 @@ export interface IProductState {
   loader: boolean;
   error: object
   promotions: Array<IProductItemState>;
+  // search: Array<IProductItemState>;
 }
 
 export const initialState: IProductState = {
@@ -94,6 +95,34 @@ export const fetchProduct = (page: number, params: object, search: boolean) => a
         dispatch(setProduct(json.data));
       }
     }
+  } else if (json.status == 422) {
+    dispatch(setError(json.data));
+  }
+  dispatch(setLoader(false));
+  return json;
+};
+
+
+export const searchByAutocomplete = () => async (dispatch: any) => {
+  dispatch(setError({}));
+  dispatch(setLoader(true));
+  const json = await Api.autoCompleteProducts();
+  if (json?.status == 200) {
+    
+      return json
+    
+  }
+  dispatch(setLoader(false));
+  return json;
+};
+
+export const searchProduct = (query: string, page:number) => async (dispatch: any) => {
+  dispatch(setError({}));
+  dispatch(setLoader(true));
+  const json = await Api.searchProduct({page, query});
+  if (json.status == 200) {
+    dispatch(setProduct(json?.data?.products?.data));
+
   } else if (json.status == 422) {
     dispatch(setError(json.data));
   }

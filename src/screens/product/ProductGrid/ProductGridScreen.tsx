@@ -18,7 +18,7 @@ import BannerProductGrid from './components/BannerProductGrid';
 import { RootStackParamList } from 'navigation/types';
 import { Grid_Types_Enum, ProductFragment, IProductItemState } from 'constants/types';
 import { data_banner_product_grid, products_list, recent_list } from 'constants/data';
-import { fetchProduct, fetchPromotions, productSelector } from "../../../store/slices/productSlice";
+import { fetchProduct, fetchPromotions, productSelector, searchProduct } from "../../../store/slices/productSlice";
 import { useAppDispatch, useAppSelector } from 'store/store';
 
 let onEndReachedCalledDuringMomentum = true;
@@ -28,7 +28,7 @@ let timer: any;
 const ProductGridScreen = React.memo(({ route }) => {
   const theme = useTheme();
   const { t } = useTranslation(['common', 'product']);
-  const { width } = useLayout();
+  const { bottom } = useLayout();
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
   const bottomSheetPhotoRef = React.useRef<BottomSheet>(null);
@@ -44,22 +44,14 @@ const ProductGridScreen = React.memo(({ route }) => {
 
   const { id, name } = Object.assign({}, route?.params?.category);
 
+
   const fetchProducts = async (page: number, params: Object) => {
     return route?.params?.isPromotion ? await dispatch(fetchPromotions(page)) : await dispatch(fetchProduct(page, params))
   }
 
-  React.useEffect(() => {
-    onEndReachedCalledDuringMomentum = true;
-    page = 1;
-    const product = async () => {
-      setLoading(true);
-      const json = await fetchProducts(page, { category_id: id })
-      setLoading(false);
-    }
-    product();
-  }, []);
+  console.log("data", data)
 
-  const applyFilter = (s:string) => {
+  const applyFilter = (s: string) => {
     page = 1;
     clearTimeout(timer);
     timer = setTimeout(async () => {
@@ -72,20 +64,44 @@ const ProductGridScreen = React.memo(({ route }) => {
     }, 100);
   }
 
+  React.useEffect(() => {
+    onEndReachedCalledDuringMomentum = true;
+    page = 1;
+    if (route?.params?.search) {
+      setLoading(false);
+      // productSearch(route?.params?.search)
+    }
+    else {
+      const product = async () => {
+        setLoading(true);
+        const json = await fetchProducts(page, { category_id: id })
+        setLoading(false);
+      }
+      product();
+    }
+  }, [route?.params?.search])
+
   const renderBanner = React.useCallback(({ item }) => {
     return <BannerProductGrid item={item} />;
   }, []);
 
   const onEndReached = React.useCallback(async () => {
+alert(onEndReachedCalledDuringMomentum)
     if (!onEndReachedCalledDuringMomentum && !isLoadingMore && is_more) {
       page++;
-      const json = await dispatch(fetchProduct(page, {
-        category_id: id
-      }));
+      if (route?.params?.search) {
+        const product = await dispatch(searchProduct(item))
+      }
+      else {
+        const json = await dispatch(fetchProduct(page, {
+          category_id: id
+        }));
+      }
       setIsLoadingMore(false)
       onEndReachedCalledDuringMomentum = true;
     }
-  }, []);
+
+  }, [isLoadingMore, is_more, onEndReachedCalledDuringMomentum]);
 
   const productSearch = (s: string) => {
     setSearch(s);
@@ -96,20 +112,6 @@ const ProductGridScreen = React.memo(({ route }) => {
   const renderHeader =
     () => (
       <View>
-        {/* <Carousel
-          data={data_banner_product_grid || []}
-          renderItem={renderBanner}
-          width={width}
-          height={186}
-          snapEnabled
-          mode="parallax"
-          modeConfig={{
-            parallaxScrollingScale: 0.9,
-            parallaxScrollingOffset: 50,
-          }}
-          loop={false}
-          enabled
-        /> */}
         <Input
           style={styles.search}
           status="search"
@@ -169,6 +171,7 @@ const ProductGridScreen = React.memo(({ route }) => {
     [loading, type]
   );
 
+  const HEIGHT_BOTTOM_TAB = bottom + 100;
   return (
     <Container>
       <TopNavigation
@@ -191,7 +194,7 @@ const ProductGridScreen = React.memo(({ route }) => {
       <Input
         style={styles.search}
         status="search"
-        value={search}
+        value={route?.params?.search ?? search}
         onChangeText={productSearch}
         placeholder={'Search... '}
         accessoryLeft={<Icon pack="assets" name="search" />}
@@ -204,7 +207,7 @@ const ProductGridScreen = React.memo(({ route }) => {
           </TouchableOpacity>
         )}
       />
-      <View style={{ marginBottom: 195 }}>
+      <View style={{ }}>
 
         {type === Grid_Types_Enum.Column ? (
           <FlatList
@@ -218,6 +221,9 @@ const ProductGridScreen = React.memo(({ route }) => {
             onEndReachedThreshold={0.5}
             onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
             ListFooterComponent={!isLoadingMore && is_more ? <ActivityIndicator size={28} /> : null}
+            contentContainerStyle={{
+              paddingBottom: HEIGHT_BOTTOM_TAB
+            }}
           />
         ) : (
           <View>
@@ -231,6 +237,9 @@ const ProductGridScreen = React.memo(({ route }) => {
               onEndReachedThreshold={0.5}
               onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
               ListFooterComponent={!isLoadingMore && is_more ? <ActivityIndicator size={28} /> : null}
+              contentContainerStyle={{
+                paddingBottom: HEIGHT_BOTTOM_TAB
+              }}
             />
           </View>
         )}

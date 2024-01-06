@@ -73,7 +73,7 @@ const OrderTracking = React.memo(() => {
         <Text category="h6" marginBottom={16}>
           {t('common:track_order')}
         </Text>
-        {data.map((i, index) => {
+        {data?.map((i, index) => {
           return <TrackOrderItem item={i} key={index} is_first={index === 0} />;
         })}
       </Content>

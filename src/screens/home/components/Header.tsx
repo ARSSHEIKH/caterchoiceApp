@@ -27,18 +27,6 @@ const Header: FC<HeaderProps> = () => {
   const {data} = useAppSelector(bannerSelector);
   const {category} = useAppSelector(categorySelector);
 
-
-
-  React.useEffect(() => {
-
-    const banner = async () => {
-      const json = await dispatch(fetchBanner());
-      await dispatch(fetchCategory());
-      
-    }
-    banner();
-  }, []);
-
   const renderBanner = React.useCallback(({ item }) => {
     const { data } = item;
     return <Banner banners={data} />;

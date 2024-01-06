@@ -107,7 +107,7 @@ const AppContainer: React.FC = () => {
             <Stack.Screen name="NotFound" component={NotFoundScreen} />
             <Stack.Screen name="ModalScreen" component={ModalScreen} />
           </Stack.Navigator>
-          <BottomSheet
+          {/* <BottomSheet
             ref={bottomSheetPhotoRef}
             snapPoints={animatedSnapPoints}
             index={-1}
@@ -117,7 +117,7 @@ const AppContainer: React.FC = () => {
             <BottomSheetView onLayout={handleContentLayout}>
               <ProfileMore />
             </BottomSheetView>
-          </BottomSheet>
+          </BottomSheet> */}
         </BottomSheetContext.Provider>
       </View>
     </NavigationContainer>

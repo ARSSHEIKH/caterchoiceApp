@@ -99,6 +99,36 @@ export default class Api {
     }
   };
 
+  static autoCompleteProducts = async () => {
+    // let params = { page: page };
+
+    // if (query && Object.keys(query).length > 0) {
+    //   Object.keys(query).map((value) => {
+    //     if (query[value]) {
+    //       params[value] = query[value];
+    //     }
+    //   });
+    // }
+    try {
+      const response = await this._api.get("/searching/autocomplete", {
+      });
+      return response;
+    } catch (error) {
+      console.log("error.response", error)
+      return error.response;
+    }
+  };
+
+
+  static searchProduct = async (query) => {
+    try {
+      const response = await this._api.post("/product_search", query);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
   static productPromotions = async (page, query) => {
     let params = { page: page };
 

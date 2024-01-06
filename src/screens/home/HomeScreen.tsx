@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, Image, StyleSheet, FlatList, TouchableOpacity, Pressable } from 'react-native';
 import {
   CollectionItem,
   Container,
@@ -9,9 +9,9 @@ import {
   Text,
   TitleBar,
 } from 'components';
-import { TopNavigation } from '@ui-kitten/components';
+import { Icon, Input, TopNavigation } from '@ui-kitten/components';
 import { useDrawer, useLayout } from 'hooks';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation, useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import Frame from './components/Frame';
@@ -22,11 +22,15 @@ import keyExtractor from 'utils/keyExtractor';
 import { ICollection, ProductFragment } from 'constants/types';
 import { collections, products_list, recent_list } from 'constants/data';
 import { RootStackParamList } from 'navigation/types';
-import { fetchFeatured, fetchPromotions, productSelector } from "../../store/slices/productSlice";
+import { fetchFeatured, fetchPromotions, productSelector, searchProduct } from "../../store/slices/productSlice";
 import { useAppDispatch, useAppSelector } from 'store/store';
 import FastImage from 'react-native-fast-image';
 import PromotionBanner from './PromotionBanner';
 import { userSelector } from 'store/slices/userSlice';
+import BottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet';
+import { fetchCategory } from 'store/slices/categorySlice';
+import { fetchBanner } from 'store/slices/bannerSlice';
+import Search from 'components/Search';
 
 const HomeScreen = React.memo(() => {
   const { openDrawer } = useDrawer();
@@ -36,8 +40,23 @@ const HomeScreen = React.memo(() => {
   const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
   const { featured } = useAppSelector(productSelector);
   const { user } = useAppSelector(userSelector)
-
+  const [searchVisible, setSearchVisible] = React.useState(false)
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [showSearchData, setShowSearchData] = React.useState(false);
+  const [search, setSearch] = React.useState("")
+
+
+
+  React.useEffect(() => {
+    const banner = async () => {
+      const json = await dispatch(fetchBanner());
+      await dispatch(fetchCategory());
+
+    }
+    banner();
+  }, []);
+
+
 
   React.useEffect(() => {
 
@@ -50,7 +69,6 @@ const HomeScreen = React.memo(() => {
     products();
 
   }, [user?.access_token]);
-
 
   const renderItem = React.useCallback(
     ({ item, index }: { item: ProductFragment; index: number }) => {
@@ -150,7 +168,7 @@ const HomeScreen = React.memo(() => {
           onPress: () => navigate('Product', { screen: 'ProductGrid', params: { category: { name: "BAKERY", id: 4 } } }),
         }}
       />
-      {/* <View style={styles.padding}> */}
+      {/* <View style={styles.paddi:ng}> */}
       <FlatList
         data={featured?.bakery || []}
         horizontal
@@ -176,26 +194,38 @@ const HomeScreen = React.memo(() => {
         accessoryLeft={<NavigationAction icon="menu" onPress={openDrawer} />}
         accessoryRight={() => (
           <View style={styles.flex}>
-            <NavigationAction marginRight={12} icon="search" onPress={() => { }} />
-            <NavigationAction icon="notification" onPress={() => { }} />
+            <NavigationAction marginRight={12} icon={searchVisible? "close" :"search"} onPress={() => {
+              searchVisible && setSearch("")
+              setSearchVisible(!searchVisible)
+              // navigate("Product", {
+              //   screen: "ProductGrid",
+              //   params: { inputFocus: true }
+              // })
+            }} />
+            {/* <NavigationAction icon="notification" osnPress={() => { }} /> */}
           </View>
         )}
         title={() => (
           <Image resizeMode='contain' style={[styles.icon40, { marginTop: top - 12 }]} source={Images.logo} />
         )}
       />
-      <FlatList
-        style={styles.container}
-        contentContainerStyle={{ paddingBottom: bottom + 86 }}
-        data={([])}
-        numColumns={2}
-        renderItem={renderItem}
-        //ListEmptyComponent={renderEmpty}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={renderHeader}
-        ListFooterComponent={renderFooter}
-        keyExtractor={(item) => `${item.id}`}
-      />
+      {searchVisible &&
+        <Search setShow={setShowSearchData} show={showSearchData} search={search} setSearch={setSearch}  />
+      }
+      {/* <Pressable onPress={() => setShowSearchData(false)}> */}
+        <FlatList
+          style={styles.container}
+          contentContainerStyle={{ paddingBottom: bottom + 86 }}
+          data={([])}
+          numColumns={2}
+          renderItem={renderItem}
+          //ListEmptyComponent={renderEmpty}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={renderHeader}
+          ListFooterComponent={renderFooter}
+          keyExtractor={(item) => `${item.id}`}
+        />
+      {/* </Pressable> */}
     </Container>
   );
 });
