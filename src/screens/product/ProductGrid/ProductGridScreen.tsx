@@ -86,7 +86,6 @@ const ProductGridScreen = React.memo(({ route }) => {
   }, []);
 
   const onEndReached = React.useCallback(async () => {
-alert(onEndReachedCalledDuringMomentum)
     if (!onEndReachedCalledDuringMomentum && !isLoadingMore && is_more) {
       page++;
       if (route?.params?.search) {
@@ -101,7 +100,7 @@ alert(onEndReachedCalledDuringMomentum)
       onEndReachedCalledDuringMomentum = true;
     }
 
-  }, [isLoadingMore, is_more, onEndReachedCalledDuringMomentum]);
+  }, [isLoadingMore, is_more]);
 
   const productSearch = (s: string) => {
     setSearch(s);
