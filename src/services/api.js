@@ -99,18 +99,19 @@ export default class Api {
     }
   };
 
-  static autoCompleteProducts = async () => {
-    // let params = { page: page };
+  static autoCompleteProducts = async (query) => {
+    let params = {  };
 
-    // if (query && Object.keys(query).length > 0) {
-    //   Object.keys(query).map((value) => {
-    //     if (query[value]) {
-    //       params[value] = query[value];
-    //     }
-    //   });
-    // }
+    if (query && Object.keys(query).length > 0) {
+      Object.keys(query).map((value) => {
+        if (query[value]) {
+          params[value] = query[value];
+        }
+      });
+    }
     try {
       const response = await this._api.get("/searching/autocomplete", {
+        params
       });
       return response;
     } catch (error) {
@@ -129,11 +130,11 @@ export default class Api {
     }
   };
 
-  static productPromotions = async (page, query) => {
+  static productPromotions = async (page, token) => {
     let params = { page: page };
 
     try {
-      const response = await axios.get(uri + "/product/product-promotions", {
+      const response = await this._api.get("/product/product-promotions", {
         params: params, headers: {
           "Authorization": `Bearer ${token}`
         }

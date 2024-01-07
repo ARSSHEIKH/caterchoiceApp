@@ -1,31 +1,37 @@
-import { FlatList, Keyboard, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, FlatList, Keyboard, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { Icon, Input } from '@ui-kitten/components'
+import { Autocomplete, AutocompleteItem, Icon, Input } from '@ui-kitten/components'
 import BottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet';
 import { useAppDispatch } from 'store/store';
 import { searchByAutocomplete, searchProduct } from 'store/slices/productSlice';
 import { NavigationProp, useNavigation, useTheme } from '@react-navigation/native';
 import { RootStackParamList } from 'navigation/types';
 import Text from './Text';
+import { useRoute } from '@react-navigation/native';
 let page = 1;
 let timer: any;
-export default function Search({ show, setShow, search, setSearch }) {
+export default function Search({ show, setShow, search, setSearch, textInputRef }) {
     const theme = useTheme();
     const dispatch = useAppDispatch();
     const bottomSheetPhotoRef = React.useRef<BottomSheet>(null);
-    const { navigate } = useNavigation<NavigationProp<RootStackParamList>>();
+    const { navigate, setParams } = useNavigation<NavigationProp<RootStackParamList>>();
     const [isTyping, setisTyping] = React.useState('');
     const [fetchProducts, setfetchProducts] = React.useState([])
     const [productsName, setproductsName] = React.useState([])
+    const [loading, setLoading] = React.useState(false)
 
-    const fetching = async () => {
-        const json = await dispatch(searchByAutocomplete(page, true));
+    const fetching = async (search?: string) => {
+        // setLoading(true)
+        const json = await dispatch(searchByAutocomplete(search ?? ""));
         setproductsName(json?.data)
         setfetchProducts(json?.data)
+
+        // setLoading(false)
     }
 
 
     React.useEffect(() => {
+
         fetching()
         const keyboardDidShowListener = Keyboard.addListener(
             'keyboardDidShow',
@@ -37,7 +43,9 @@ export default function Search({ show, setShow, search, setSearch }) {
         const keyboardDidHideListener = Keyboard.addListener(
             'keyboardDidHide',
             () => {
+                // setTimeout(() => {
                 // setShow(false);
+                // }, 100);
             }
         );
 
@@ -45,48 +53,54 @@ export default function Search({ show, setShow, search, setSearch }) {
         return () => {
             keyboardDidShowListener.remove();
             keyboardDidHideListener.remove();
+            // setShow(false);
+            setSearch("")
         };
     }, []);
-
 
     const applyFilter = (s: string) => {
         page = 1;
         clearTimeout(timer);
         timer = setTimeout(async () => {
-            // setLoading(true);
-            const filtered = productsName?.filter((names: string) => names?.toLowerCase().includes(s?.toLowerCase()));
-            setfetchProducts(filtered)
-            // setLoading(false);
+            if (s != "") {
+                fetching(s)
+                // setLoading(true);
+                // const filtered = productsName?.filter((names: string) => names?.toLowerCase().includes(s?.toLowerCase()));
+                // console.log("filtered", filtered)
+                // setfetchProducts(filtered)
+                // setLoading(false);
+            }
+            else {
+                setfetchProducts(productsName)
+            }
         }, 100);
     }
 
-    const productSearch = (s: string) => {
-        setSearch(s);
-        applyFilter(s);
-    }
+    const { name: routeName } = useRoute()
 
-    // console.log("autoCompleteProducts", fetchProducts);
-
+    const productSearch = React.useCallback((query: string): void => {
+        setSearch(query);
+        applyFilter(query);
+    }, []);
 
     const renderAutoComplete = React.useCallback(
-        ({ item }) => {
-
+        ({ item }: { item: string }) => {
             return (
-                <Pressable style={{ paddingVertical: 5 }} onPress={
+                <Text category='c2' style={{ paddingVertical: 7, }} onPress={
                     async () => {
-
-                        const product = await dispatch(searchProduct(item))
-
-                        if (product?.status == 200)
-                            navigate("Product", {
-                                screen: "ProductGrid", params: { search: true }
-                            })
+                        if (routeName == "ProductGrid") {
+                            setParams({ search: item })
+                        }
+                        else navigate("Product", {
+                            screen: "ProductGrid", params: { search: item }
+                        })
+                        setShow(false)
                     }
                 }  >
-                    <Text category='c2' >{item}</Text>
-                </Pressable>
+                    {item}
+                </Text>
             )
-        }, [search])
+        }, [])
 
     const searchCall = async () => {
         navigate("Product", {
@@ -97,27 +111,38 @@ export default function Search({ show, setShow, search, setSearch }) {
         //     search
         // }, true));
     }
+    const renderOption = ({ item, index }): React.ReactElement => (
+        <AutocompleteItem
+            style={{ width: 300, borderRadius: 0 }}
+            key={index}
+            title={item}
+        />
+    );
+    console.log("show", show);
+
 
     return (
         <View style={styles.search}>
             <Input
                 status="search"
                 value={search}
+                ref={textInputRef}
                 onChangeText={productSearch}
                 placeholder={'Search... '}
                 accessoryRight={(props) => (
-                    <TouchableOpacity
+                    <Text
                         activeOpacity={0.7}
                         style={[styles.filter, { borderColor: theme['background-basic-color-5'] }]}
                         onPress={searchCall}>
                         <Icon {...props} pack="assets" name="search" />
-                    </TouchableOpacity>
+                    </Text>
                 )}
             />
+
             {show && <FlatList
                 data={fetchProducts || []}
                 renderItem={renderAutoComplete}
-                keyExtractor={(item) => `${item.id}`}
+                keyExtractor={(item) => `${item}`}
                 style={{
                     borderWidth: 0.5,
                     borderTopWidth: 0,
@@ -128,7 +153,7 @@ export default function Search({ show, setShow, search, setSearch }) {
                     zIndex: 899999,
                     backgroundColor: "#fff",
                     minHeight: "auto",
-                    maxHeight: 150
+                    maxHeight: 150,
                 }}
                 contentContainerStyle={{ paddingBottom: 10 }}
                 showsVerticalScrollIndicator={true}

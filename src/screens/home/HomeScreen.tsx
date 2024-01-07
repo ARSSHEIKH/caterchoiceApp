@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { View, Image, StyleSheet, FlatList, TouchableOpacity, Pressable } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { View, Image, StyleSheet, FlatList, TouchableOpacity, Pressable, Keyboard } from 'react-native';
 import {
   CollectionItem,
   Container,
@@ -31,6 +31,8 @@ import BottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSh
 import { fetchCategory } from 'store/slices/categorySlice';
 import { fetchBanner } from 'store/slices/bannerSlice';
 import Search from 'components/Search';
+import { TouchableWithoutFeedback } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = React.memo(() => {
   const { openDrawer } = useDrawer();
@@ -47,19 +49,18 @@ const HomeScreen = React.memo(() => {
 
 
 
+  // React.useEffect(() => {
+
+  // }, []);
+
+
+
   React.useEffect(() => {
     const banner = async () => {
       const json = await dispatch(fetchBanner());
       await dispatch(fetchCategory());
-
     }
     banner();
-  }, []);
-
-
-
-  React.useEffect(() => {
-
     const products = async () => {
       setLoading(true);
       const json = await dispatch(fetchFeatured(1, "drinks", { category_id: 1 }));
@@ -68,7 +69,12 @@ const HomeScreen = React.memo(() => {
     }
     products();
 
-  }, [user?.access_token]);
+    return () => {
+      setSearch("")
+      setShowSearchData(false)
+      setSearchVisible(false)
+    }
+  }, [user?.access_token])
 
   const renderItem = React.useCallback(
     ({ item, index }: { item: ProductFragment; index: number }) => {
@@ -117,7 +123,7 @@ const HomeScreen = React.memo(() => {
     </View>
   );
 
-
+  const textInputRef = useRef(null);
   const renderHeader = () => <Header />;
 
   const renderFooter = () => (
@@ -187,32 +193,38 @@ const HomeScreen = React.memo(() => {
     // </View>
   );
 
+
+  const handleOutsideClick = () => {
+    setShowSearchData(false);
+    Keyboard.dismiss()
+  };
   return (
-    <Container useSafeArea={false}>
-      <TopNavigation
-        style={{ paddingTop: top + 12 }}
-        accessoryLeft={<NavigationAction icon="menu" onPress={openDrawer} />}
-        accessoryRight={() => (
-          <View style={styles.flex}>
-            <NavigationAction marginRight={12} icon={searchVisible? "close" :"search"} onPress={() => {
-              searchVisible && setSearch("")
-              setSearchVisible(!searchVisible)
-              // navigate("Product", {
-              //   screen: "ProductGrid",
-              //   params: { inputFocus: true }
-              // })
-            }} />
-            {/* <NavigationAction icon="notification" osnPress={() => { }} /> */}
-          </View>
-        )}
-        title={() => (
-          <Image resizeMode='contain' style={[styles.icon40, { marginTop: top - 12 }]} source={Images.logo} />
-        )}
-      />
-      {searchVisible &&
-        <Search setShow={setShowSearchData} show={showSearchData} search={search} setSearch={setSearch}  />
-      }
-      {/* <Pressable onPress={() => setShowSearchData(false)}> */}
+    <TouchableWithoutFeedback onPress={() => handleOutsideClick(false)}>
+      <Container useSafeArea={false}>
+        <TopNavigation
+          style={{ paddingTop: top + 12 }}
+          accessoryLeft={<NavigationAction icon="menu" onPress={openDrawer} />}
+          accessoryRight={() => (
+            <Text style={styles.flex}>
+              <NavigationAction marginRight={5} style={{paddingHorizontal: 15,}} icon={searchVisible ? "close" : "search"} onPress={() => {
+                searchVisible && setSearch("")
+                setSearchVisible(!searchVisible)
+                // navigate("Product", {
+                //   screen: "ProductGrid",
+                //   params: { inputFocus: true }
+                // })
+              }} />
+              {/* <NavigationAction icon="notification" osnPress={() => { }} /> */}
+            </Text>
+          )}
+          title={() => (
+            <Image resizeMode='contain' style={[styles.icon40, { marginTop: top  }]} source={Images.logo} />
+          )}
+        />
+        {searchVisible &&
+          <Search setShow={setShowSearchData} show={showSearchData} search={search} setSearch={setSearch} />
+        }
+        {/* <Pressable onPress={() => setShowSearchData(false)}> */}
         <FlatList
           style={styles.container}
           contentContainerStyle={{ paddingBottom: bottom + 86 }}
@@ -225,8 +237,9 @@ const HomeScreen = React.memo(() => {
           ListFooterComponent={renderFooter}
           keyExtractor={(item) => `${item.id}`}
         />
-      {/* </Pressable> */}
-    </Container>
+        {/* </Pressable> */}
+      </Container>
+    </TouchableWithoutFeedback>
   );
 });
 
@@ -255,6 +268,7 @@ const styles = StyleSheet.create({
   flex: {
     flexDirection: 'row',
     alignItems: 'center',
+    
   },
   icon40: {
     width: 200,

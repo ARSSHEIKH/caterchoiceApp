@@ -2,6 +2,8 @@ import React from 'react';
 import { TextStyle } from 'react-native';
 import { Text, TextProps } from '@ui-kitten/components';
 
+
+
 export interface MyTextProps extends TextProps {
   style?: TextStyle;
   category?:
@@ -131,7 +133,7 @@ export default React.forwardRef(
       underline,
       line_through,
       category = 'b1',
-      status,
+      status="basic",
       children,
       maxWidth,
       style,
@@ -172,6 +174,7 @@ export default React.forwardRef(
       <Text
         category={category}
         status={status}
+        appearance='default'
         style={[
           {
             marginLeft: marginLeft,

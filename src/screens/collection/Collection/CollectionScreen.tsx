@@ -53,7 +53,7 @@ const CollectionScreen = React.memo(() => {
       <TopNavigation
         title={t('collection:Category').toString()}
         accessoryLeft={<NavigationAction icon="menu" onPress={openDrawer} />}
-        accessoryRight={<NavigationAction icon="option" onPress={() => {}} />}
+        // accessoryRight={<NavigationAction icon="option" onPress={() => {}} />}
       />
       <Content contentContainerStyle={{ paddingBottom: bottom + 24 }}>
         {category.map((item, index)=>{

@@ -103,10 +103,10 @@ export const fetchProduct = (page: number, params: object, search: boolean) => a
 };
 
 
-export const searchByAutocomplete = () => async (dispatch: any) => {
+export const searchByAutocomplete = (query:string) => async (dispatch: any) => {
   dispatch(setError({}));
   dispatch(setLoader(true));
-  const json = await Api.autoCompleteProducts();
+  const json = await Api.autoCompleteProducts({query});
   if (json?.status == 200) {
     
       return json
@@ -121,7 +121,12 @@ export const searchProduct = (query: string, page:number) => async (dispatch: an
   dispatch(setLoader(true));
   const json = await Api.searchProduct({page, query});
   if (json.status == 200) {
-    dispatch(setProduct(json?.data?.products?.data));
+   
+    if (page > 1) {
+      dispatch(setMoreProduct(json.data));
+    } else {
+      dispatch(setProduct(json.data));
+    }
 
   } else if (json.status == 422) {
     dispatch(setError(json.data));
@@ -138,10 +143,10 @@ export const fetchFeatured = (page: number, name: string, params: object) => asy
   return json;
 };
 
-export const fetchPromotions = (page: number) => async (dispatch: any) => {
+export const fetchPromotions = (page: number, token: string) => async (dispatch: any) => {
   dispatch(setError({}));
   dispatch(setLoader(true));
-  const json = await Api.productPromotions(page);
+  const json = await Api.productPromotions(page, token);
   if (json.status == 200) {
     if (page > 1) {
       dispatch(setMoreProduct(json.data?.data));

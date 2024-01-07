@@ -150,7 +150,7 @@ const ProfileScreen = React.memo(() => {
                 </Text>
               )}
               accessoryLeft={<NavigationAction icon="menu" onPress={openDrawer} status="white" />}
-              accessoryRight={<NavigationAction icon="option" status="white" onPress={expand} />}
+              // accessoryRight={<NavigationAction icon="option" status="white" onPress={expand} />}
             />
             {/* <View style={[styles.avatar, { borderColor: theme['color-basic-800'] }]}>
               <Avatar size="80" source={{ uri: Images.avatar_3 }} />

@@ -53,7 +53,7 @@ const MyOrder = React.memo(() => {
       <TopNavigation
         title={t('common:my_order')}
         accessoryLeft={<NavigationAction />}
-        accessoryRight={<NavigationAction icon="order" />}
+        // accessoryRight={<NavigationAction icon="order" />}
       />
       <View>
         <FlatList

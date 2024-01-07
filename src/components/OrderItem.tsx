@@ -31,7 +31,7 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
   return (
     <View
       style={[styles.container, { borderBottomColor: theme['background-basic-color-4'] }, style]}>
-      <View style={styles.row}>
+      <View style={{}}>
         <Text category="t2" status="content" maxWidth={"80%"}>
           {t('order')} #{reference_no}
         </Text>

@@ -20,6 +20,8 @@ import { Grid_Types_Enum, ProductFragment, IProductItemState } from 'constants/t
 import { data_banner_product_grid, products_list, recent_list } from 'constants/data';
 import { fetchProduct, fetchPromotions, productSelector, searchProduct } from "../../../store/slices/productSlice";
 import { useAppDispatch, useAppSelector } from 'store/store';
+import Search from 'components/Search';
+import { userSelector } from 'store/slices/userSlice';
 
 let onEndReachedCalledDuringMomentum = true;
 let page = 1;
@@ -36,20 +38,23 @@ const ProductGridScreen = React.memo(({ route }) => {
   const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
     useBottomSheetDynamicSnapPoints(initialSnapPoints);
 
-  const [search, setSearch] = React.useState<string>('');
+  const [search, setSearch] = React.useState<string>(route?.params?.search ?? "");
   const [loading, setLoading] = React.useState<boolean>(true);
   const [type, setType] = React.useState<Grid_Types_Enum>(Grid_Types_Enum.Column);
   const [isLoadingMore, setIsLoadingMore] = React.useState<boolean>(false);
   const { data, is_more } = useAppSelector(productSelector);
 
   const { id, name } = Object.assign({}, route?.params?.category);
+  const [searchVisible, setSearchVisible] = React.useState(false)
+  const [showSearchData, setShowSearchData] = React.useState(false);
+  const { user } = useAppSelector(userSelector);
+
 
 
   const fetchProducts = async (page: number, params: Object) => {
-    return route?.params?.isPromotion ? await dispatch(fetchPromotions(page)) : await dispatch(fetchProduct(page, params))
+    return route?.params?.isPromotion ? await dispatch(fetchPromotions(page, user?.access_token)) : await dispatch(fetchProduct(page, params))
   }
 
-  console.log("data", data)
 
   const applyFilter = (s: string) => {
     page = 1;
@@ -68,8 +73,12 @@ const ProductGridScreen = React.memo(({ route }) => {
     onEndReachedCalledDuringMomentum = true;
     page = 1;
     if (route?.params?.search) {
+      setLoading(true);
+      setTimeout(() => {
+        dispatch(searchProduct(route?.params?.search))
+        setSearch(route?.params?.search)
+      }, 100);
       setLoading(false);
-      // productSearch(route?.params?.search)
     }
     else {
       const product = async () => {
@@ -79,17 +88,20 @@ const ProductGridScreen = React.memo(({ route }) => {
       }
       product();
     }
-  }, [route?.params?.search])
+    return () => {
+      setShowSearchData(false)
+    }
+  }, [route?.params?.search, route?.params?.isPromotion])
 
   const renderBanner = React.useCallback(({ item }) => {
     return <BannerProductGrid item={item} />;
   }, []);
 
   const onEndReached = React.useCallback(async () => {
-    if (!onEndReachedCalledDuringMomentum && !isLoadingMore && is_more) {
+    if (!onEndReachedCalledDuringMomentum && is_more) {
       page++;
       if (route?.params?.search) {
-        const product = await dispatch(searchProduct(item))
+        const product = await dispatch(searchProduct(route?.params?.search, page))
       }
       else {
         const json = await dispatch(fetchProduct(page, {
@@ -170,7 +182,7 @@ const ProductGridScreen = React.memo(({ route }) => {
     [loading, type]
   );
 
-  const HEIGHT_BOTTOM_TAB = bottom + 100;
+  const HEIGHT_BOTTOM_TAB = bottom + 190;
   return (
     <Container>
       <TopNavigation
@@ -190,7 +202,7 @@ const ProductGridScreen = React.memo(({ route }) => {
           </View>
         }
       />
-      <Input
+      {/* <Input
         style={styles.search}
         status="search"
         value={route?.params?.search ?? search}
@@ -205,8 +217,9 @@ const ProductGridScreen = React.memo(({ route }) => {
             <Icon {...props} pack="assets" name="filter" />
           </TouchableOpacity>
         )}
-      />
-      <View style={{ }}>
+      /> */}
+      <Search setShow={setShowSearchData} show={showSearchData} search={search} setSearch={setSearch} />
+      <View style={{}}>
 
         {type === Grid_Types_Enum.Column ? (
           <FlatList

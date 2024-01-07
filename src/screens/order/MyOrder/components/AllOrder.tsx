@@ -26,7 +26,6 @@ const AllOrder: React.FC<AllOrderProps> = () => {
   const {data} = useAppSelector(orderSelector);
 
   React.useEffect(() => {
-    page = 1
     dispatch(fetchOrder(page,{}));
   }, []);
 
@@ -74,7 +73,7 @@ const AllOrder: React.FC<AllOrderProps> = () => {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.contentContainer}
-        ListHeaderComponent={listHeaderComponent}
+        // ListHeaderComponent={listHeaderComponent}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.5}
         onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}
