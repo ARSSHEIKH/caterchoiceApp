@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, FlatList, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList, Alert, ActivityIndicator, Keyboard } from 'react-native';
 import { Container, NavigationAction, ProductHorizontal, ProductItem } from 'components';
 import { useTheme, TopNavigation, Input, Icon } from '@ui-kitten/components';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -22,6 +22,7 @@ import { fetchProduct, fetchPromotions, productSelector, searchProduct } from ".
 import { useAppDispatch, useAppSelector } from 'store/store';
 import Search from 'components/Search';
 import { userSelector } from 'store/slices/userSlice';
+import { TouchableWithoutFeedback } from 'react-native';
 
 let onEndReachedCalledDuringMomentum = true;
 let page = 1;
@@ -49,8 +50,6 @@ const ProductGridScreen = React.memo(({ route }) => {
   const [showSearchData, setShowSearchData] = React.useState(false);
   const { user } = useAppSelector(userSelector);
 
-
-
   const fetchProducts = async (page: number, params: Object) => {
     return route?.params?.isPromotion ? await dispatch(fetchPromotions(page, user?.access_token)) : await dispatch(fetchProduct(page, params))
   }
@@ -72,6 +71,7 @@ const ProductGridScreen = React.memo(({ route }) => {
   React.useEffect(() => {
     onEndReachedCalledDuringMomentum = true;
     page = 1;
+
     if (route?.params?.search) {
       setLoading(true);
       setTimeout(() => {
@@ -182,8 +182,13 @@ const ProductGridScreen = React.memo(({ route }) => {
     [loading, type]
   );
 
+  const handleOutsideClick = () => {
+    setShowSearchData(false);
+    Keyboard.dismiss()
+  };
   const HEIGHT_BOTTOM_TAB = bottom + 190;
   return (
+    <TouchableWithoutFeedback onPress={() => handleOutsideClick(false)}>
     <Container>
       <TopNavigation
         accessoryLeft={<NavigationAction />}
@@ -268,6 +273,7 @@ const ProductGridScreen = React.memo(({ route }) => {
         </BottomSheetView>
       </BottomSheet>
     </Container>
+    </TouchableWithoutFeedback>
   );
 });
 

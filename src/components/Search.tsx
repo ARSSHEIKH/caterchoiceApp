@@ -21,12 +21,10 @@ export default function Search({ show, setShow, search, setSearch, textInputRef 
     const [loading, setLoading] = React.useState(false)
 
     const fetching = async (search?: string) => {
-        // setLoading(true)
         const json = await dispatch(searchByAutocomplete(search ?? ""));
         setproductsName(json?.data)
         setfetchProducts(json?.data)
-
-        // setLoading(false)
+        await setLoading(false)
     }
 
 
@@ -79,6 +77,7 @@ export default function Search({ show, setShow, search, setSearch, textInputRef 
     const { name: routeName } = useRoute()
 
     const productSearch = React.useCallback((query: string): void => {
+            setLoading(true)
         setSearch(query);
         applyFilter(query);
     }, []);
@@ -118,8 +117,6 @@ export default function Search({ show, setShow, search, setSearch, textInputRef 
             title={item}
         />
     );
-    console.log("show", show);
-
 
     return (
         <View style={styles.search}>
@@ -130,12 +127,20 @@ export default function Search({ show, setShow, search, setSearch, textInputRef 
                 onChangeText={productSearch}
                 placeholder={'Search... '}
                 accessoryRight={(props) => (
-                    <Text
-                        activeOpacity={0.7}
-                        style={[styles.filter, { borderColor: theme['background-basic-color-5'] }]}
-                        onPress={searchCall}>
-                        <Icon {...props} pack="assets" name="search" />
-                    </Text>
+                    <View style={{ flexDirection: "row", alignItems: "center" }} >
+                        {loading && <Text
+                            activeOpacity={0.7}
+                            style={[styles.filter, { borderColor: theme['color-basic-500'], marginRight: 10 }]}
+                        >
+                            <ActivityIndicator color={"#BAB8B7"} size={"small"} />
+                        </Text>}
+                        <Text
+                            activeOpacity={0.7}
+                            style={[styles.filter, { borderColor: theme['background-basic-color-5'] }]}
+                            onPress={searchCall}>
+                            <Icon {...props} pack="assets" name="search" />
+                        </Text>
+                    </View>
                 )}
             />
 
@@ -153,7 +158,9 @@ export default function Search({ show, setShow, search, setSearch, textInputRef 
                     zIndex: 899999,
                     backgroundColor: "#fff",
                     minHeight: "auto",
-                    maxHeight: 150,
+                    maxHeight: 200,
+                    borderBottomLeftRadius:5,
+                    borderBottomRightRadius:5
                 }}
                 contentContainerStyle={{ paddingBottom: 10 }}
                 showsVerticalScrollIndicator={true}

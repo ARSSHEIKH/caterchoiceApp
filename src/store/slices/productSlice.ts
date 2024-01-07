@@ -3,6 +3,7 @@ import { RootState } from '../rootReducer';
 import Api from "services/api";
 
 export interface IProductItemState {
+  product?: IProductItemState;
   id: number;
   name: string;
   code: string;
@@ -116,10 +117,10 @@ export const searchByAutocomplete = (query:string) => async (dispatch: any) => {
   return json;
 };
 
-export const searchProduct = (query: string, page:number) => async (dispatch: any) => {
+export const searchProduct = (search: string, page:number) => async (dispatch: any) => {
   dispatch(setError({}));
   dispatch(setLoader(true));
-  const json = await Api.searchProduct({page, query});
+  const json = await Api.searchProduct({page, search});
   if (json.status == 200) {
    
     if (page > 1) {

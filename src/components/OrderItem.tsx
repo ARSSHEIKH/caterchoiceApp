@@ -8,6 +8,7 @@ import { OrderFragment } from 'constants/types';
 import { openLink } from 'utils/openLink';
 import { paymentUrl } from 'constants/common';
 import { useNavigation } from '@react-navigation/native';
+import { IProductItemState } from 'store/slices/productSlice';
 
 interface OrderItemProps {
   style?: ViewStyle;
@@ -31,21 +32,22 @@ const OrderItem: React.FC<any> = ({ style, item, buttonLeft, buttonRight }) => {
   return (
     <View
       style={[styles.container, { borderBottomColor: theme['background-basic-color-4'] }, style]}>
-      <View style={{}}>
-        <Text category="t2" status="content" maxWidth={"80%"}>
+     
+        <Text category="t2" status="content" maxWidth={"95%"}>
           {t('order')} #{reference_no}
         </Text>
+        <View style={{flexDirection:"row", alignItems:"center"}}>
         <Text category="c2">{payment_status}</Text>
         {
           payment_status && payment_status?.toLowerCase().includes("pending") &&
-          <Text category="b4" underline style={{ paddingVertical: 10 }}
+          <Text category="b4" underline style={{ padding: 10 }}
             onPress={() => navigate('OrderCompleted', { orderId: id })}
           >
             Pay Now
           </Text>
         }
       </View>
-      {(items || []).map((i, idx) => {
+      {(items || []).map((i:IProductItemState, idx:number) => {
         return <ProductHorizontal key={idx} item={(i?.product || {})} type={i?.type} />
       })}
       <View style={styles.row1}>

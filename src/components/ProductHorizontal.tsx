@@ -21,7 +21,7 @@ import { datesDifference } from 'utils/datesDifference';
 interface ProductHorizontalProps {
   style?: ViewStyle;
   item: ProductFragment;
-  type?: 'SINGLE' | 'CASE'
+  type?: "SINGLE" | "CASE" | undefined
   onPress?(): void;
 }
 
